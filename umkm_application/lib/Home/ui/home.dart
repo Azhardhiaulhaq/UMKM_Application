@@ -4,6 +4,7 @@ import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Model/data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/widget/category_tab.dart';
+import 'package:umkm_application/widget/store_list.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -93,103 +94,107 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _storeCard() {
-    return Flexible(
-      child: Container(
-          width: MediaQuery.of(context).size.width,
-          height:160,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              elevation: 3,
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Wrap(
-                  direction: Axis.vertical,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg"),
-                      minRadius: 30,
-                      maxRadius: 50,
-                    ),
-                    SizedBox(width: 5),
-                    VerticalDivider(),
-                    SizedBox(width: 5),
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.55,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Sepatu Murah Bandung ABCDEF',
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16)),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text('Bandung, Jawa Barat',
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14)),
-                            SizedBox(height: 15),
-                            // _makeLabel("Food"),
-                            Wrap(
-                              direction: Axis.horizontal,
-                              spacing: 5,
-                              children: [_makeLabel("Food"),_makeLabel("Fashion"),_makeLabel("Art")]
-                            )
-                          ],
-                        ))
-                  ],
-                ),
-              ))),
+    return Expanded(
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: AppData.storeList
+            .map(
+              (store) => StoreList(
+                model: store,
+              ),
+            )
+            .toList(),)
     );
   }
 
-// Column(
-//               mainAxisSize: MainAxisSize.max,
-//               children: [
-//                 const ListTile(
-//                     leading: CircleAvatar(
-//                         backgroundImage: NetworkImage(
-//                             "https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg"),),
-//                             title: Text('Sepatu Murah Bandung', style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
-//                             subtitle: Text('Bandung, Jawa Barat', style: TextStyle(color:Colors.grey, fontWeight: FontWeight.bold)))
-//               ],
-//             )
+  // Widget _storeCard() {
+  //   return Container(
+  //         width: MediaQuery.of(context).size.width,
+  //         height: 160,
+  //         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //         child: Card(
+  //             shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(10)),
+  //             elevation: 3,
+  //             child: Padding(
+  //               padding: EdgeInsets.all(15),
+  //               child: Wrap(
+  //                 direction: Axis.vertical,
+  //                 children: [
+  //                   CircleAvatar(
+  //                     backgroundImage: NetworkImage(
+  //                         "https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg"),
+  //                     minRadius: 30,
+  //                     maxRadius: 50,
+  //                   ),
+  //                   SizedBox(width: 5),
+  //                   VerticalDivider(),
+  //                   SizedBox(width: 5),
+  //                   Container(
+  //                       width: MediaQuery.of(context).size.width * 0.55,
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           Text('Sepatu Murah Bandung ABCDEF',
+  //                               overflow: TextOverflow.fade,
+  //                               style: TextStyle(
+  //                                   color: Colors.black,
+  //                                   fontWeight: FontWeight.bold,
+  //                                   fontSize: 16)),
+  //                           SizedBox(
+  //                             height: 5,
+  //                           ),
+  //                           Text('Bandung, Jawa Barat',
+  //                               overflow: TextOverflow.fade,
+  //                               style: TextStyle(
+  //                                   color: Colors.grey,
+  //                                   fontWeight: FontWeight.bold,
+  //                                   fontSize: 14)),
+  //                           SizedBox(height: 15),
+  //                           // _makeLabel("Food"),
+  //                           Wrap(
+  //                               direction: Axis.horizontal,
+  //                               spacing: 5,
+  //                               children: [
+  //                                 _makeLabel("Food"),
+  //                                 _makeLabel("Fashion"),
+  //                                 _makeLabel("Art")
+  //                               ])
+  //                         ],
+  //                       ))
+  //                 ],
+  //               ),
+  //             )),
+  //   );
+  // }
 
   Widget _makeLabel(String labelCategory) {
     return Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: ConstColor.sbmdarkBlue,
-            border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Color(0xfffbf2ef),
-                blurRadius: 10,
-                spreadRadius: 5,
-                offset: Offset(5, 5),
-              ),
-            ],
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: ConstColor.sbmdarkBlue,
+        border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Color(0xfffbf2ef),
+            blurRadius: 10,
+            spreadRadius: 5,
+            offset: Offset(5, 5),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(labelCategory,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white)),
-            ],
-          ),
-        );
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(labelCategory,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white)),
+        ],
+      ),
+    );
   }
 
   @override
@@ -213,6 +218,7 @@ class _HomePageState extends State<HomePage> {
                     _search(),
                     _categoryWidget(),
                     _storeCard(),
+                    SizedBox(height:100)
                   ],
                 )))
       ]),

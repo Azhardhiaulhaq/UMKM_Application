@@ -11,6 +11,9 @@ class AppData{
   ];
 
   static List<Store> storeList = [
-    Store(id:1,name:"Sepatu Murah Bandung",city:"Bandung",province:"Jawa Barat",tags:["Fashion"]),
+    Store(id:1,name:"Sepatu Murah Bandung Jaya ABCDEFGH",image:"https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg", city:"Bandung",province:"Jawa Barat",tags:["Fashion"]),
+    Store(id:2,name:"Sepatu Murah Surabaya",image:"https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg", city:"Bandung",province:"Jawa Barat",tags:["Fashion"]),
+    Store(id:3,name:"Sepatu Murah Medan",image:"https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg", city:"Bandung",province:"Jawa Barat",tags:["Fashion"]),
+    Store(id:4,name:"Seblak Jeletet",image:"https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg", city:"Bandung",province:"Jawa Barat",tags:["Fashion","Food"]),
   ];
 }
