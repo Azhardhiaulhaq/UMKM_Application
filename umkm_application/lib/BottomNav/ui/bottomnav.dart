@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:umkm_application/Authentication/Login/ui/loginscreen.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Event/ui/event_list.dart';
 import 'package:umkm_application/Home/ui/home.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -26,15 +28,38 @@ class _BottomNavigationState extends State<BottomNavigation> {
   List<Widget> _buildScreens() {
     return [
       HomePage(title: "Home Page"),
+      EventPage(),
       Text(
-        'Index 1: Event',
+        'Index 3: Coaching Clinic',
       ),
       Text(
         'Index 2: Statistic',
       ),
-      Text(
-        'Index 3: Profile',
+      InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginScreen()));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Keluar',
+              style: TextStyle(
+                  color: ConstColor.sbmdarkBlue,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
+    ),
     ];
   }
 
@@ -53,14 +78,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
+        icon: Icon(Icons.people),
+        title: ("Coaching"),
+        activeColorPrimary: ConstColor.sbmdarkBlue,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
         icon: Icon(Icons.insert_chart_outlined),
         title: ("Statistic"),
         activeColorPrimary: ConstColor.sbmdarkBlue,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.people),
-        title: ("Profile"),
+        icon: Icon(Icons.settings),
+        title: ("Setting"),
         activeColorPrimary: ConstColor.sbmdarkBlue,
         inactiveColorPrimary: Colors.grey,
       ),

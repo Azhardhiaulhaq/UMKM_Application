@@ -1,23 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
-import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 
+// ignore: must_be_immutable
 class StoreList extends StatelessWidget {
-  final Store model;
-  StoreList({Key? key, required this.model}) : super(key: key);
+  String id;
+  String name;
+  String image;
+  String city;
+  String province;
+  String address;
+  List<String> tags;
+  String bukalapak;
+  String description;
+  String email;
+  String facebook;
+  String instagram;
+  String phone;
+  String shoope;
+  String tokopedia;
+  // ignore: non_constant_identifier_names
+  String youtube_link;
+
+  StoreList({
+    Key? key,
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.city,
+    required this.province,
+    required this.address,
+    required this.tags,
+    required this.bukalapak,
+    required this.description,
+    required this.email,
+    required this.facebook,
+    required this.instagram,
+    required this.phone,
+    required this.shoope,
+    required this.tokopedia,
+    // ignore: non_constant_identifier_names
+    required this.youtube_link,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return model.id == null
+    // ignore: unnecessary_null_comparison
+    return id == null
         ? Container(width: 5)
         : Material(
             color: Colors.transparent,
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () => pushNewScreen(context,
-                screen: StoreDetail(context: context, model : model)),
+                  screen: StoreDetail(
+                    context: context,
+                    id: id,
+                    name: name,
+                    image: image,
+                    city: city,
+                    province: province,
+                    address: address,
+                    tags: tags,
+                    bukalapak: bukalapak,
+                    description: description,
+                    email: email,
+                    facebook: facebook,
+                    instagram: instagram,
+                    phone: phone,
+                    shoope: shoope,
+                    tokopedia: tokopedia,
+                    youtube_link: youtube_link,
+                  )),
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 160,
@@ -32,7 +87,7 @@ class StoreList extends StatelessWidget {
                           direction: Axis.vertical,
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(model.image),
+                              backgroundImage: NetworkImage(image),
                               minRadius: 30,
                               maxRadius: 50,
                             ),
@@ -44,7 +99,7 @@ class StoreList extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(model.name,
+                                    Text(name,
                                         overflow: TextOverflow.fade,
                                         style: TextStyle(
                                             color: Colors.black,
@@ -53,7 +108,7 @@ class StoreList extends StatelessWidget {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text(model.city + ', ' + model.province,
+                                    Text(city + ', ' + province,
                                         overflow: TextOverflow.fade,
                                         style: TextStyle(
                                             color: Colors.grey,
@@ -64,7 +119,7 @@ class StoreList extends StatelessWidget {
                                     Wrap(
                                         direction: Axis.horizontal,
                                         spacing: 5,
-                                        children: model.tags
+                                        children: tags
                                             .map(
                                               (label) => _makeLabel(label),
                                             )

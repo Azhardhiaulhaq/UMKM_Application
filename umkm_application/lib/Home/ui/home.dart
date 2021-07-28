@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:umkm_application/Const/const_color.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
   Widget _title() {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
@@ -25,12 +27,12 @@ class _HomePageState extends State<HomePage> {
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Our',
+                    Text('Daftar',
                         style: GoogleFonts.lato(
                             color: Colors.black,
                             fontSize: 24,
                             fontWeight: FontWeight.w400)),
-                    Text('UMKM Members',
+                    Text('Anggota UMKM',
                         style: GoogleFonts.lato(
                             color: Colors.black,
                             fontSize: 24,
@@ -54,7 +56,7 @@ class _HomePageState extends State<HomePage> {
               child: TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Search Products",
+                    hintText: "Cari UMKM yang diinginkan",
                     hintStyle: TextStyle(fontSize: 12),
                     contentPadding:
                         EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
@@ -94,79 +96,44 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _storeCard() {
-    return Expanded(
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: AppData.storeList
-            .map(
-              (store) => StoreList(
-                model: store,
-              ),
-            )
-            .toList(),)
+    return StreamBuilder<QuerySnapshot>(
+      stream: users.snapshots(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No Data'),
+          );
+        }
+        return Expanded(
+            child: ListView(
+          scrollDirection: Axis.vertical,
+          children: snapshot.data!.docs
+              .map((e) => StoreList(
+                  id: e.get('uid'),
+                  name: e.get('umkm_name'),
+                  image: e.get('image'),
+                  city: e.get('city'),
+                  province: e.get('province'),
+                  bukalapak:e.get('bukalapak_name'),
+                  description: e.get('description'),
+                  phone: e.get('phone_number'),
+                  email:e.get("email"),
+                  address : e.get('address'),
+                  youtube_link: e.get('youtube_link'),
+                  instagram: e.get('instagram_acc'),
+                  facebook:e.get('facebook_acc'),
+                  shoope:e.get('shoope_name'),
+                  tokopedia:e.get('tokopedia_name'),
+                  tags: List.from(e.get('tag'),
+                  )))
+              .toList(),
+        ));
+      },
     );
   }
-
-  // Widget _storeCard() {
-  //   return Container(
-  //         width: MediaQuery.of(context).size.width,
-  //         height: 160,
-  //         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  //         child: Card(
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(10)),
-  //             elevation: 3,
-  //             child: Padding(
-  //               padding: EdgeInsets.all(15),
-  //               child: Wrap(
-  //                 direction: Axis.vertical,
-  //                 children: [
-  //                   CircleAvatar(
-  //                     backgroundImage: NetworkImage(
-  //                         "https://marketplace-images-production.s3-us-west-2.amazonaws.com/vault/items/preview-552e2ef3-5814-481c-8390-74360a141525-1180x660-DqZTZ.jpg"),
-  //                     minRadius: 30,
-  //                     maxRadius: 50,
-  //                   ),
-  //                   SizedBox(width: 5),
-  //                   VerticalDivider(),
-  //                   SizedBox(width: 5),
-  //                   Container(
-  //                       width: MediaQuery.of(context).size.width * 0.55,
-  //                       child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           Text('Sepatu Murah Bandung ABCDEF',
-  //                               overflow: TextOverflow.fade,
-  //                               style: TextStyle(
-  //                                   color: Colors.black,
-  //                                   fontWeight: FontWeight.bold,
-  //                                   fontSize: 16)),
-  //                           SizedBox(
-  //                             height: 5,
-  //                           ),
-  //                           Text('Bandung, Jawa Barat',
-  //                               overflow: TextOverflow.fade,
-  //                               style: TextStyle(
-  //                                   color: Colors.grey,
-  //                                   fontWeight: FontWeight.bold,
-  //                                   fontSize: 14)),
-  //                           SizedBox(height: 15),
-  //                           // _makeLabel("Food"),
-  //                           Wrap(
-  //                               direction: Axis.horizontal,
-  //                               spacing: 5,
-  //                               children: [
-  //                                 _makeLabel("Food"),
-  //                                 _makeLabel("Fashion"),
-  //                                 _makeLabel("Art")
-  //                               ])
-  //                         ],
-  //                       ))
-  //                 ],
-  //               ),
-  //             )),
-  //   );
-  // }
 
   Widget _makeLabel(String labelCategory) {
     return Container(
@@ -218,13 +185,10 @@ class _HomePageState extends State<HomePage> {
                     _search(),
                     _categoryWidget(),
                     _storeCard(),
-                    SizedBox(height:100)
+                    SizedBox(height: 100)
                   ],
                 )))
       ]),
     ));
   }
 }
-// Container(
-//         decoration: BoxDecoration(color: ConstColor.lightgreyBG),
-//         child: Center(child: Text('Home Screen')));

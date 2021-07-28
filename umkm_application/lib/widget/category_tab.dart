@@ -10,6 +10,7 @@ class CategoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_null_comparison
     return model.id == null
         ? Container(width: 5)
         : Material(
@@ -50,6 +51,7 @@ class CategoryTab extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
+                  // ignore: unnecessary_null_comparison
                   model.name == null
                       ? Container()
                       : Container(
