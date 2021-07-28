@@ -11,7 +11,6 @@ import 'package:umkm_application/Authentication/Signup/bloc/bloc/register_bloc.d
 import 'package:umkm_application/BottomNav/ui/bottomnav.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import '../../../widget/bezierContainer.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key? key, required this.title}) : super(key: key);

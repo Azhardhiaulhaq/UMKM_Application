@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Model/event.dart';
-import 'package:umkm_application/Model/store.dart';
-import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
-import 'package:expansion_card/expansion_card.dart';
 
 class EventCard extends StatelessWidget {
   final Event model;
@@ -14,6 +8,7 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_null_comparison
     return model.id == null
         ? Container(width: 5)
         : Material(
@@ -88,32 +83,32 @@ class EventCard extends StatelessWidget {
             ));
   }
 
-  Widget _makeLabel(String labelCategory) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: ConstColor.sbmdarkBlue,
-        border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Color(0xfffbf2ef),
-            blurRadius: 10,
-            spreadRadius: 5,
-            offset: Offset(5, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(labelCategory,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-        ],
-      ),
-    );
-  }
+  // Widget _makeLabel(String labelCategory) {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.all(Radius.circular(10)),
+  //       color: ConstColor.sbmdarkBlue,
+  //       border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
+  //       boxShadow: <BoxShadow>[
+  //         BoxShadow(
+  //           color: Color(0xfffbf2ef),
+  //           blurRadius: 10,
+  //           spreadRadius: 5,
+  //           offset: Offset(5, 5),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: <Widget>[
+  //         Text(labelCategory,
+  //             style: TextStyle(
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w700,
+  //                 color: Colors.white)),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

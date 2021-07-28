@@ -5,6 +5,7 @@ class UserRepository {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static CollectionReference users = firestore.collection('users');
+  static CollectionReference statistics = firestore.collection('statistics');
   // Sign Up with email and password
 
   static Future<User?> signUp(String email, String password, String umkmName) async {
@@ -29,6 +30,9 @@ class UserRepository {
         'youtube_link' : '',
         'umkm_name' : umkmName,
         'role' : 'store'
+      });
+      await statistics.doc(auth.user!.uid).set({
+        'umkm_name' : umkmName,
       });
       return auth.user;
     } catch (e) {

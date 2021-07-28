@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:umkm_application/Authentication/Login/ui/login.dart';
 import 'package:umkm_application/Authentication/Login/ui/loginscreen.dart';
 import 'package:umkm_application/Authentication/bloc/auth_bloc.dart';
-import 'package:umkm_application/Authentication/data/repositories/user_repositories.dart';
 import 'package:umkm_application/BottomNav/ui/bottomnav.dart';
 
 void main() async{

@@ -4,6 +4,7 @@ import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/store_description.dart';
 import 'package:umkm_application/StoreDetail/ui/store_product.dart';
 
+// ignore: must_be_immutable
 class StoreDetail extends StatelessWidget {
   final BuildContext context;
   String id;
@@ -21,6 +22,7 @@ class StoreDetail extends StatelessWidget {
   String phone;
   String shoope;
   String tokopedia;
+  // ignore: non_constant_identifier_names
   String youtube_link;
   StoreDetail({
     Key? key,
@@ -40,6 +42,7 @@ class StoreDetail extends StatelessWidget {
     required this.phone,
     required this.shoope,
     required this.tokopedia,
+    // ignore: non_constant_identifier_names
     required this.youtube_link,
   }) : super(key: key);
 

@@ -69,6 +69,7 @@ class StoreProduct extends StatelessWidget {
                       childAspectRatio: 0.75),
                   itemBuilder: (context, index) => ProductCard(
                       umkmid : umkmid,
+                      productid : snapshot.data!.docs[index].id,
                       name: snapshot.data!.docs[index].get('name'),
                       description:
                           snapshot.data!.docs[index].get('description'),

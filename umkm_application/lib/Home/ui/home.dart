@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Model/data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/widget/category_tab.dart';
@@ -135,34 +133,34 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _makeLabel(String labelCategory) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: ConstColor.sbmdarkBlue,
-        border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Color(0xfffbf2ef),
-            blurRadius: 10,
-            spreadRadius: 5,
-            offset: Offset(5, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(labelCategory,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-        ],
-      ),
-    );
-  }
+  // Widget _makeLabel(String labelCategory) {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.all(Radius.circular(10)),
+  //       color: ConstColor.sbmdarkBlue,
+  //       border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
+  //       boxShadow: <BoxShadow>[
+  //         BoxShadow(
+  //           color: Color(0xfffbf2ef),
+  //           blurRadius: 10,
+  //           spreadRadius: 5,
+  //           offset: Offset(5, 5),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: <Widget>[
+  //         Text(labelCategory,
+  //             style: TextStyle(
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w700,
+  //                 color: Colors.white)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

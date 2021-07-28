@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -5,7 +6,9 @@ import 'package:umkm_application/ProductDetail/ui/product_detail.dart';
 
 // ignore: must_be_immutable
 class ProductCard extends StatelessWidget {
+  late DocumentReference statistics;
   String umkmid;
+  String productid;
   String name;
   String description;
   String image;
@@ -16,6 +19,7 @@ class ProductCard extends StatelessWidget {
   ProductCard(
       {Key? key,
       required this.umkmid,
+      required this.productid,
       required this.name,
       required this.description,
       required this.image,
@@ -27,9 +31,12 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    statistics = FirebaseFirestore.instance.collection('statistics').doc(umkmid).collection('products').doc(productid);
     return InkWell(
         splashColor: Colors.transparent,
-        onTap: () => pushNewScreen(context,
+        onTap: () { 
+          statistics.update({'product' : name, 'count':FieldValue.increment(1)});
+          pushNewScreen(context,
             screen: ProductDetail(
                 context: context,
                 umkmid: umkmid,
@@ -39,7 +46,7 @@ class ProductCard extends StatelessWidget {
                 price: price,
                 tokopedia: tokopedia,
                 shopee : shopee,
-                bukalapak:bukalapak)),
+                bukalapak:bukalapak));},
         child: Container(
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(16)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:umkm_application/Authentication/Signup/bloc/bloc/register_bloc.dart';
 import 'package:umkm_application/Authentication/Signup/ui/signup.dart';

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
@@ -7,6 +8,7 @@ import 'package:whatsapp_share/whatsapp_share.dart';
 
 // ignore: must_be_immutable
 class ProductDetail extends StatelessWidget {
+    late DocumentReference statistics;
   final BuildContext context;
   String umkmid;
   String name;
@@ -162,6 +164,7 @@ class ProductDetail extends StatelessWidget {
                                   icon: Image.asset("assets/tokopedia.png",
                                       width: 30, height: 30),
                                   onPressed: () {
+                                    statistics.update({'tokopedia':FieldValue.increment(1)});
                                     openLink('https://www.tokopedia.com/' +
                                         tokopedia +
                                         '/');
@@ -176,6 +179,7 @@ class ProductDetail extends StatelessWidget {
                                   icon: Image.asset("assets/shopee.png",
                                       width: 30, height: 30),
                                   onPressed: () {
+                                    statistics.update({'shopee':FieldValue.increment(1)});
                                     openLink('https://www.shopee.co.id/' +
                                         shopee +
                                         '/');
@@ -190,6 +194,7 @@ class ProductDetail extends StatelessWidget {
                                   icon: Image.asset("assets/bukalapak.png",
                                       width: 30, height: 30),
                                   onPressed: () {
+                                    statistics.update({'bukalapak':FieldValue.increment(1)});
                                     openLink('https://www.bukalapak.com/' +
                                         bukalapak +
                                         '/');
@@ -205,6 +210,7 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    statistics = FirebaseFirestore.instance.collection('statistics').doc(umkmid);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: ConstColor.sbmdarkBlue,

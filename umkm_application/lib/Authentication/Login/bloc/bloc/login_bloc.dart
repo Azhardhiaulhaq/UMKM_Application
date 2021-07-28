@@ -1,5 +1,6 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';

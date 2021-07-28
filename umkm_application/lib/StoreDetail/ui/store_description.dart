@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
@@ -9,8 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class StoreDescription extends StatelessWidget {
+  late DocumentReference statistics;
   final BuildContext context;
-    String id;
+  String id;
   String name;
   String image;
   String city;
@@ -27,7 +29,9 @@ class StoreDescription extends StatelessWidget {
   String tokopedia;
   // ignore: non_constant_identifier_names
   String youtube_link;
-  StoreDescription({Key? key, required this.context,
+  StoreDescription({
+    Key? key,
+    required this.context,
     required this.id,
     required this.name,
     required this.image,
@@ -44,8 +48,8 @@ class StoreDescription extends StatelessWidget {
     required this.shoope,
     required this.tokopedia,
     // ignore: non_constant_identifier_names
-    required this.youtube_link,})
-      : super(key: key);
+    required this.youtube_link,
+  }) : super(key: key);
 
   Future<void> share(String phone, String text) async {
     await WhatsappShare.share(
@@ -152,8 +156,7 @@ class StoreDescription extends StatelessWidget {
   }
 
   Widget _videoPromotion() {
-    String? videoID = YoutubePlayer.convertUrlToId(
-            youtube_link);
+    String? videoID = YoutubePlayer.convertUrlToId(youtube_link);
     YoutubePlayerController _youtubeController = YoutubePlayerController(
       initialVideoId: videoID!,
       flags: YoutubePlayerFlags(
@@ -301,7 +304,7 @@ class StoreDescription extends StatelessWidget {
                                   color: Color(0xffE1306C), size: 30),
                               onPressed: () {
                                 openLink('https://www.instagram.com/' +
-                                  instagram +
+                                    instagram +
                                     '/');
                               },
                             )),
@@ -345,6 +348,7 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/tokopedia.png",
                                   width: 30, height: 30),
                               onPressed: () {
+                                statistics.update({'tokopedia':FieldValue.increment(1)});
                                 openLink('https://www.tokopedia.com/' +
                                     tokopedia +
                                     '/');
@@ -359,9 +363,9 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/shopee.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                openLink('https://www.shopee.co.id/' +
-                                    shoope +
-                                    '/');
+                                statistics.update({'shopee':FieldValue.increment(1)});
+                                openLink(
+                                    'https://www.shopee.co.id/' + shoope + '/');
                               },
                             )),
                         Container(
@@ -373,6 +377,7 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/bukalapak.png",
                                   width: 30, height: 30),
                               onPressed: () {
+                                statistics.update({'bukalapak':FieldValue.increment(1)});
                                 openLink('https://www.bukalapak.com/' +
                                     bukalapak +
                                     '/');
@@ -384,6 +389,7 @@ class StoreDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    statistics = FirebaseFirestore.instance.collection('statistics').doc(id);
     return Scaffold(
         body: SafeArea(
       child: Stack(fit: StackFit.expand, children: <Widget>[

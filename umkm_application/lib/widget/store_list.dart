@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
@@ -5,6 +6,7 @@ import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 
 // ignore: must_be_immutable
 class StoreList extends StatelessWidget {
+  late DocumentReference statistics;
   String id;
   String name;
   String image;
@@ -46,6 +48,7 @@ class StoreList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    statistics = FirebaseFirestore.instance.collection('statistics').doc(id);
     // ignore: unnecessary_null_comparison
     return id == null
         ? Container(width: 5)
@@ -53,7 +56,9 @@ class StoreList extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: () => pushNewScreen(context,
+              onTap: () {
+                statistics.update({'store':FieldValue.increment(1)});
+                pushNewScreen(context,
                   screen: StoreDetail(
                     context: context,
                     id: id,
@@ -72,7 +77,7 @@ class StoreList extends StatelessWidget {
                     shoope: shoope,
                     tokopedia: tokopedia,
                     youtube_link: youtube_link,
-                  )),
+                  ));},
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 160,

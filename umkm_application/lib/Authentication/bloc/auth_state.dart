@@ -8,6 +8,7 @@ abstract class AuthState extends Equatable {
 }
 
 class AuthInitial extends AuthState {}
+// ignore: must_be_immutable
 class AuthenticateState extends AuthState {
   User user;
   AuthenticateState({required this.user});

@@ -7,6 +7,7 @@ abstract class RegisterEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// ignore: must_be_immutable
 class SignUpButtonPressed extends RegisterEvent {
   String email, password, umkmName;
   SignUpButtonPressed({required this.email, required this.password, required this.umkmName});
