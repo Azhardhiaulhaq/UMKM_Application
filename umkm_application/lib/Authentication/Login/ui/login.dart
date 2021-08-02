@@ -26,6 +26,29 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
   late LoginBloc _loginBloc;
+  bool isEmailValid = false;
+  bool isPasswordValid = false;
+
+  String? validateEmail(String? value) {
+    if (value == null) {
+      setState(() {
+        isEmailValid = false;
+      });
+      return 'Alamat email tidak boleh kosong';
+    } else {
+      if (!value.contains('@')) {
+        setState(() {
+          isEmailValid = false;
+        });
+        return 'Alamat email tidak valid';
+      } else {
+        setState(() {
+          isEmailValid = true;
+        });
+        return null;
+      }
+    }
+  }
 
   Widget _backButton() {
     return InkWell(
@@ -50,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false}) {
+      {bool isPassword = false, Icon? entryIcon = null}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -67,10 +90,15 @@ class _LoginPageState extends State<LoginPage> {
               controller: controller,
               obscureText: isPassword,
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: ConstColor.textfieldBG,
-                  filled: true,
-                  hintText: hintText))
+                border: InputBorder.none,
+                prefixIcon: entryIcon,
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                    borderRadius: BorderRadius.circular(15)),
+                fillColor: ConstColor.textfieldBG,
+                filled: true,
+                hintText: hintText,
+              ))
         ],
       ),
     );
@@ -110,50 +138,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-// pushNewScreen(context,
-//                 screen: BottomNavigation(
-//                   menuScreenContext: context,
-//                 ))
-  // Widget _divider() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(vertical: 10),
-  //     child: Row(
-  //       children: <Widget>[
-  //         SizedBox(
-  //           width: 20,
-  //         ),
-  //         Expanded(
-  //           child: Padding(
-  //             padding: EdgeInsets.symmetric(horizontal: 10),
-  //             child: Divider(
-  //               thickness: 1,
-  //             ),
-  //           ),
-  //         ),
-  //         Text('or'),
-  //         Expanded(
-  //           child: Padding(
-  //             padding: EdgeInsets.symmetric(horizontal: 10),
-  //             child: Divider(
-  //               thickness: 1,
-  //             ),
-  //           ),
-  //         ),
-  //         SizedBox(
-  //           width: 20,
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _createAccountLabel() {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SignupScreen()));
+            context, MaterialPageRoute(builder: (context) => SignupScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
@@ -182,36 +171,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Widget _title() {
-  //   return RichText(
-  //     textAlign: TextAlign.left,
-  //     text: TextSpan(
-  //         text: 'd',
-  //         style: GoogleFonts.portLligatSans(
-  //           textStyle: Theme.of(context).textTheme.display1,
-  //           fontSize: 30,
-  //           fontWeight: FontWeight.w700,
-  //           color: Color(0xffe46b10),
-  //         ),
-  //         children: [
-  //           TextSpan(
-  //             text: 'ev',
-  //             style: TextStyle(color: Colors.black, fontSize: 30),
-  //           ),
-  //           TextSpan(
-  //             text: 'rnz',
-  //             style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-  //           ),
-  //         ]),
-  //   );
-  // }
-
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Email", "Masukkan alamat email", emailController),
+        _entryField("Email", "Masukkan alamat email", emailController,
+            entryIcon: Icon(Icons.email, color: ConstColor.sbmdarkBlue)),
         _entryField("Password", "Masukkan password", passwordController,
-            isPassword: true),
+            isPassword: true,
+            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
       ],
     );
   }
@@ -287,4 +254,3 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 }
-

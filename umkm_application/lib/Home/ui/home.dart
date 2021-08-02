@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/widget/category_tab.dart';
 import 'package:umkm_application/widget/store_list.dart';
 
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
@@ -16,6 +17,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  List<String> categorySelected = ["makanan", "pakaian", "kesenian"];
+  TextEditingController searchController =
+      TextEditingController(text: "");
+  String searchQuery = "";
   Widget _title() {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
@@ -52,6 +57,12 @@ class _HomePageState extends State<HomePage> {
                   color: Color(0xffE1E2E4),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
+                onChanged: (search){
+                  setState(() {
+                    searchQuery = search.toUpperCase();
+                  });
+                },
+                controller: searchController,
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Cari UMKM yang diinginkan",
@@ -83,6 +94,14 @@ class _HomePageState extends State<HomePage> {
                     AppData.categoryList.forEach((item) {
                       item.isSelected = false;
                     });
+
+                    categorySelected = [];
+                    if (model.name.toLowerCase() == "semua") {
+                      categorySelected = ["makanan", "pakaian", "kesenian"];
+                    } else {
+                      categorySelected.add(model.name.toLowerCase());
+                    }
+                    print(categorySelected);
                     model.isSelected = true;
                   });
                 },
@@ -93,9 +112,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Stream<QuerySnapshot> homeStream() {
+    return searchQuery != "" ? users.where(
+        "umkm_name",
+        isGreaterThanOrEqualTo: searchQuery,
+        isLessThan: searchQuery.substring(0, searchQuery.length - 1) +
+            String.fromCharCode(searchQuery.codeUnitAt(searchQuery.length - 1) + 1),
+      ).where("tag", arrayContainsAny: categorySelected).snapshots() : users.where("tag", arrayContainsAny: categorySelected).snapshots();;
+  }
+
   Widget _storeCard() {
     return StreamBuilder<QuerySnapshot>(
-      stream: users.snapshots(),
+      stream: homeStream(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -115,17 +143,18 @@ class _HomePageState extends State<HomePage> {
                   image: e.get('image'),
                   city: e.get('city'),
                   province: e.get('province'),
-                  bukalapak:e.get('bukalapak_name'),
+                  bukalapak: e.get('bukalapak_name'),
                   description: e.get('description'),
                   phone: e.get('phone_number'),
-                  email:e.get("email"),
-                  address : e.get('address'),
+                  email: e.get("email"),
+                  address: e.get('address'),
                   youtube_link: e.get('youtube_link'),
                   instagram: e.get('instagram_acc'),
-                  facebook:e.get('facebook_acc'),
-                  shoope:e.get('shoope_name'),
-                  tokopedia:e.get('tokopedia_name'),
-                  tags: List.from(e.get('tag'),
+                  facebook: e.get('facebook_acc'),
+                  shoope: e.get('shoope_name'),
+                  tokopedia: e.get('tokopedia_name'),
+                  tags: List.from(
+                    e.get('tag'),
                   )))
               .toList(),
         ));

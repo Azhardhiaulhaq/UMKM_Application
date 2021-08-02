@@ -57,27 +57,14 @@ class StoreList extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () {
-                statistics.update({'store':FieldValue.increment(1)});
-                pushNewScreen(context,
-                  screen: StoreDetail(
-                    context: context,
-                    id: id,
-                    name: name,
-                    image: image,
-                    city: city,
-                    province: province,
-                    address: address,
-                    tags: tags,
-                    bukalapak: bukalapak,
-                    description: description,
-                    email: email,
-                    facebook: facebook,
-                    instagram: instagram,
-                    phone: phone,
-                    shoope: shoope,
-                    tokopedia: tokopedia,
-                    youtube_link: youtube_link,
-                  ));},
+                statistics.update({'store': FieldValue.increment(1)});
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StoreDetail(
+                              uid: id,
+                            )));
+              },
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 160,

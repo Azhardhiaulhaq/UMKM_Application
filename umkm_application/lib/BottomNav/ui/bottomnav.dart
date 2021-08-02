@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:umkm_application/Authentication/Login/ui/loginscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
+import 'package:umkm_application/data/repositories/user_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_list.dart';
 import 'package:umkm_application/Home/ui/home.dart';
@@ -17,12 +20,20 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   late PersistentTabController _controller;
   late bool _hideNavBar;
+  late SharedPreferences prefs;
+
+  Future<void> initPreference() async {
+    this.prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
     _hideNavBar = false;
+    initPreference().whenComplete(() {
+      setState(() {});
+    });
   }
 
   List<Widget> _buildScreens() {
@@ -35,31 +46,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
       Text(
         'Index 2: Statistic',
       ),
-      InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LoginScreen()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Keluar',
-              style: TextStyle(
-                  color: ConstColor.sbmdarkBlue,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    ),
+      StoreDetail(
+        uid: this.prefs.getString("userid")!,
+      )
     ];
   }
 
@@ -90,8 +79,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: ("Setting"),
+        icon: Icon(MdiIcons.faceProfile),
+        title: ("Profile"),
         activeColorPrimary: ConstColor.sbmdarkBlue,
         inactiveColorPrimary: Colors.grey,
       ),
@@ -110,9 +99,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
-      navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0
-          ? 0.0
-          : 64,
+      navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : 64,
       hideNavigationBarWhenKeyboardShows: true,
       margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 25.0),
       popActionScreens: PopActionScreensType.all,

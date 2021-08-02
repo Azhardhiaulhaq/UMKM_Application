@@ -1,55 +1,54 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
+import 'package:umkm_application/data/repositories/user_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/main.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:umkm_application/data/repositories/store_repositories.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ignore: must_be_immutable
-class StoreDescription extends StatelessWidget {
-  late DocumentReference statistics;
-  final BuildContext context;
-  String id;
-  String name;
-  String image;
-  String city;
-  String province;
-  String address;
-  List<String> tags;
-  String bukalapak;
-  String description;
-  String email;
-  String facebook;
-  String instagram;
-  String phone;
-  String shoope;
-  String tokopedia;
-  // ignore: non_constant_identifier_names
-  String youtube_link;
+class StoreDescription extends StatefulWidget {
   StoreDescription({
     Key? key,
     required this.context,
     required this.id,
-    required this.name,
-    required this.image,
-    required this.city,
-    required this.province,
-    required this.address,
-    required this.tags,
-    required this.bukalapak,
-    required this.description,
-    required this.email,
-    required this.facebook,
-    required this.instagram,
-    required this.phone,
-    required this.shoope,
-    required this.tokopedia,
-    // ignore: non_constant_identifier_names
-    required this.youtube_link,
   }) : super(key: key);
+  late DocumentReference statistics;
+  final BuildContext context;
+
+  String id;
+
+  @override
+  _StoreDescriptionState createState() => _StoreDescriptionState(
+        context: context,
+        id: id,
+      );
+}
+
+// ignore: must_be_immutable
+class _StoreDescriptionState extends State<StoreDescription> {
+  late DocumentReference statistics;
+  final BuildContext context;
+  String id;
+
+  _StoreDescriptionState({
+    Key? key,
+    required this.context,
+    required this.id,
+  });
+  late SharedPreferences prefs;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> share(String phone, String text) async {
     await WhatsappShare.share(
@@ -71,14 +70,15 @@ class StoreDescription extends StatelessWidget {
     }
   }
 
-  Widget _overviewStore() {
+  Widget _overviewStore(String image, String name, String city, String province,
+      String email, String phone) {
     return Material(
         color: Colors.transparent,
         child: InkWell(
           splashColor: Colors.transparent,
           child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 180,
+              height: 220,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Card(
                   shape: RoundedRectangleBorder(
@@ -89,10 +89,51 @@ class StoreDescription extends StatelessWidget {
                     child: Wrap(
                       direction: Axis.vertical,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(image),
-                          minRadius: 30,
-                          maxRadius: 50,
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(image),
+                              minRadius: 30,
+                              maxRadius: 50,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    ImagePicker picker = ImagePicker();
+                                    final XFile? image = await picker.pickImage(
+                                        source: ImageSource.gallery);
+                                    File _imageFile = File(image!.path);
+                                    await StoreRepository.updateImage(
+                                        id, _imageFile);
+                                  },
+                                  child: Text('Ubah Foto'),
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    primary: ConstColor.sbmdarkBlue,
+                                      shape: StadiumBorder()),
+                                )),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await UserRepository.signOut();
+                                    Navigator.of(context, rootNavigator: true).pop(context);
+                                    
+                                  },
+                                  child: Text('Keluar'),
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    primary: Colors.redAccent,
+                                      shape: StadiumBorder()),
+                                )),
+                          ],
                         ),
                         SizedBox(width: 5),
                         VerticalDivider(),
@@ -155,8 +196,10 @@ class StoreDescription extends StatelessWidget {
         ));
   }
 
-  Widget _videoPromotion() {
-    String? videoID = YoutubePlayer.convertUrlToId(youtube_link);
+  Widget _videoPromotion(String youtube_link) {
+    String? videoID = YoutubePlayer.convertUrlToId(youtube_link) != null
+        ? YoutubePlayer.convertUrlToId(youtube_link)
+        : '';
     YoutubePlayerController _youtubeController = YoutubePlayerController(
       initialVideoId: videoID!,
       flags: YoutubePlayerFlags(
@@ -201,7 +244,8 @@ class StoreDescription extends StatelessWidget {
     );
   }
 
-  Widget _descriptionStore() {
+  Widget _descriptionStore(String description, address, city, province, phone,
+      instagram, facebook, tokopedia, shoope, bukalapak) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -348,7 +392,8 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/tokopedia.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update({'tokopedia':FieldValue.increment(1)});
+                                statistics.update(
+                                    {'tokopedia': FieldValue.increment(1)});
                                 openLink('https://www.tokopedia.com/' +
                                     tokopedia +
                                     '/');
@@ -363,7 +408,8 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/shopee.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update({'shopee':FieldValue.increment(1)});
+                                statistics.update(
+                                    {'shopee': FieldValue.increment(1)});
                                 openLink(
                                     'https://www.shopee.co.id/' + shoope + '/');
                               },
@@ -377,7 +423,8 @@ class StoreDescription extends StatelessWidget {
                               icon: Image.asset("assets/bukalapak.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update({'bukalapak':FieldValue.increment(1)});
+                                statistics.update(
+                                    {'bukalapak': FieldValue.increment(1)});
                                 openLink('https://www.bukalapak.com/' +
                                     bukalapak +
                                     '/');
@@ -387,35 +434,139 @@ class StoreDescription extends StatelessWidget {
     );
   }
 
+  Future<void> initPreference() async {
+    this.prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPreference().whenComplete(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     statistics = FirebaseFirestore.instance.collection('statistics').doc(id);
-    return Scaffold(
-        body: SafeArea(
-      child: Stack(fit: StackFit.expand, children: <Widget>[
-        SingleChildScrollView(
-            child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Color(0xfffbfbfb),
-                  Color(0xfff7f7f7),
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 10),
-                    _overviewStore(),
-                    SizedBox(height: 5),
-                    _videoPromotion(),
-                    SizedBox(height: 5),
-                    _descriptionStore(),
-                    SizedBox(
-                      height: 100,
-                    ),
-                  ],
-                )))
-      ]),
-    ));
+    return StreamBuilder<DocumentSnapshot>(
+      stream: users.doc(id).snapshots(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No Data'),
+          );
+        }
+
+        return Scaffold(
+          body: SafeArea(
+            child: Stack(fit: StackFit.expand, children: <Widget>[
+              SingleChildScrollView(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                            Color(0xfffbfbfb),
+                            Color(0xfff7f7f7),
+                          ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 10),
+                          _overviewStore(
+                              snapshot.data!.get('image'),
+                              snapshot.data!.get('umkm_name'),
+                              snapshot.data!.get('city'),
+                              snapshot.data!.get('province'),
+                              snapshot.data!.get('email'),
+                              snapshot.data!.get('phone_number')),
+                          SizedBox(height: 5),
+                          _videoPromotion(snapshot.data!.get('youtube_link')),
+                          SizedBox(height: 5),
+                          _descriptionStore(
+                              snapshot.data!.get('description'),
+                              snapshot.data!.get('address'),
+                              snapshot.data!.get('city'),
+                              snapshot.data!.get('province'),
+                              snapshot.data!.get('phone_number'),
+                              snapshot.data!.get('instagram_acc'),
+                              snapshot.data!.get('facebook_acc'),
+                              snapshot.data!.get('tokopedia_name'),
+                              snapshot.data!.get('shoope_name'),
+                              snapshot.data!.get('bukalapak_name')),
+                          SizedBox(
+                            height: 100,
+                          ),
+                        ],
+                      )))
+            ]),
+          ),
+          floatingActionButton: this.prefs.getString("userid") == id
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoreFormScreen(
+                                  address: snapshot.data!.get('address'),
+                                  bukalapakName:
+                                      snapshot.data!.get('bukalapak_name'),
+                                  city: snapshot.data!.get('city'),
+                                  description:
+                                      snapshot.data!.get('description'),
+                                  email: snapshot.data!.get('email'),
+                                  province: snapshot.data!.get('province'),
+                                  facebookAcc:
+                                      snapshot.data!.get('facebook_acc'),
+                                  instagramAcc:
+                                      snapshot.data!.get('instagram_acc'),
+                                  phoneNumber:
+                                      snapshot.data!.get('phone_number'),
+                                  shoopeName: snapshot.data!.get('shoope_name'),
+                                  tag: snapshot.data!.get('tag').cast<String>(),
+                                  tokopediaName:
+                                      snapshot.data!.get('tokopedia_name'),
+                                  uid: id,
+                                  umkmName: snapshot.data!.get('umkm_name'),
+                                  youtubeLink:
+                                      snapshot.data!.get('youtube_link'),
+                                )));
+                  },
+                  label: Text("Sunting Profile"),
+                  icon: Icon(Icons.edit),
+                  backgroundColor: ConstColor.sbmdarkBlue,
+                )
+              : Container(),
+          floatingActionButtonLocation: AlmostEndFloatFabLocation(),
+        );
+      },
+    );
+  }
+}
+
+class AlmostEndFloatFabLocation extends StandardFabLocation
+    with FabEndOffsetX, FabFloatOffsetY {
+  @override
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment =
+        scaffoldGeometry.textDirection == TextDirection.ltr ? 5.0 : 0;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
+  }
+
+  @override
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment =
+        scaffoldGeometry.textDirection == TextDirection.ltr ? 350 : -10;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
   }
 }

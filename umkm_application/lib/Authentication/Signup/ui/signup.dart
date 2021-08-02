@@ -50,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false}) {
+      {bool isPassword = false, Icon? entryIcon = null}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -67,10 +67,15 @@ class _SignUpPageState extends State<SignUpPage> {
               controller: controller,
               obscureText: isPassword,
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true,
-                  hintText: hintText))
+                border: InputBorder.none,
+                prefixIcon: entryIcon,
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                    borderRadius: BorderRadius.circular(15)),
+                fillColor: ConstColor.textfieldBG,
+                filled: true,
+                hintText: hintText,
+              ))
         ],
       ),
     );
@@ -170,13 +175,20 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Email", "Masukkan alamat email", emailController),
-        _entryField("Nama UMKM", "Masukkan nama UMKM", umkmController),
+        _entryField("Email", "Masukkan alamat email", emailController,
+            entryIcon: Icon(Icons.email, color: ConstColor.sbmdarkBlue)),
+        _entryField("Nama UMKM", "Masukkan nama UMKM", umkmController,
+            entryIcon: Icon(
+              Icons.account_box,
+              color: ConstColor.sbmdarkBlue,
+            )),
         _entryField("Password", "Masukkan password", passwordController,
-            isPassword: true),
+            isPassword: true,
+            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
         _entryField("Konfirmasi Password", "Konfirmasi password anda",
             confirmController,
-            isPassword: true),
+            isPassword: true,
+            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
       ],
     );
   }

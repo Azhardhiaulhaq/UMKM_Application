@@ -1,18 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
 import 'package:umkm_application/widget/product_card.dart';
 
+class StoreProduct extends StatefulWidget {
+  StoreProduct(
+      {Key? key,
+      required this.context,
+      required this.umkmid,
+      required this.tokopedia,
+      required this.shopee,
+      required this.bukalapak})
+      : super(key: key);
+  final BuildContext context;
+  final String umkmid;
+  final String tokopedia;
+  final String shopee;
+  final String bukalapak;
+
+  @override
+  _StoreProductState createState() => _StoreProductState(
+      context: context,
+      umkmid: umkmid,
+      tokopedia: tokopedia,
+      shopee: shopee,
+      bukalapak: bukalapak);
+}
+
 // ignore: must_be_immutable
-class StoreProduct extends StatelessWidget {
+class _StoreProductState extends State<StoreProduct> {
+  String searchQuery = "";
   late CollectionReference products;
   final BuildContext context;
   final String umkmid;
   final String tokopedia;
   final String shopee;
   final String bukalapak;
-  StoreProduct({Key? key, required this.context, required this.umkmid, required this.tokopedia, required this.shopee, required this.bukalapak})
-      : super(key: key);
-
+  _StoreProductState(
+      {Key? key,
+      required this.context,
+      required this.umkmid,
+      required this.tokopedia,
+      required this.shopee,
+      required this.bukalapak});
+  late SharedPreferences prefs;
   Widget _search() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -26,6 +60,11 @@ class StoreProduct extends StatelessWidget {
                   color: Color(0xffE1E2E4),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value.toUpperCase();
+                  });
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Cari produk yang diinginkan",
@@ -41,13 +80,34 @@ class StoreProduct extends StatelessWidget {
     );
   }
 
+  Stream<QuerySnapshot> productStream() {
+    return searchQuery != ""
+        ? FirebaseFirestore.instance
+            .collection('users')
+            .doc(umkmid)
+            .collection('products')
+            .where(
+              "name",
+              isGreaterThanOrEqualTo: searchQuery,
+              isLessThan: searchQuery.substring(0, searchQuery.length - 1) +
+                  String.fromCharCode(
+                      searchQuery.codeUnitAt(searchQuery.length - 1) + 1),
+            )
+            .snapshots()
+        : FirebaseFirestore.instance
+            .collection('users')
+            .doc(umkmid)
+            .collection('products')
+            .snapshots();
+  }
+
   Widget _productCard() {
     products = FirebaseFirestore.instance
         .collection('users')
         .doc(umkmid)
         .collection('products');
     return StreamBuilder<QuerySnapshot>(
-      stream: products.snapshots(),
+      stream: productStream(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -68,36 +128,68 @@ class StoreProduct extends StatelessWidget {
                       crossAxisSpacing: 5,
                       childAspectRatio: 0.75),
                   itemBuilder: (context, index) => ProductCard(
-                      umkmid : umkmid,
-                      productid : snapshot.data!.docs[index].id,
+                      umkmid: umkmid,
+                      productid: snapshot.data!.docs[index].id,
                       name: snapshot.data!.docs[index].get('name'),
                       description:
                           snapshot.data!.docs[index].get('description'),
                       image: snapshot.data!.docs[index].get('image'),
                       price: snapshot.data!.docs[index].get('price'),
-                      tokopedia : tokopedia,
-                      shopee : shopee,
-                      bukalapak : bukalapak),
+                      tokopedia: tokopedia,
+                      shopee: shopee,
+                      bukalapak: bukalapak),
                 )));
       },
     );
   }
 
+  Future<void> initPreference() async {
+    this.prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPreference().whenComplete(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 10,
-        ),
-        Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: _search()),
-        SizedBox(
-          height: 10,
-        ),
-        _productCard(),
-        SizedBox(height: 100),
-      ],
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5), child: _search()),
+          SizedBox(
+            height: 10,
+          ),
+          _productCard(),
+          SizedBox(height: 100),
+        ],
+      ),
+      floatingActionButton: this.prefs.getString("userid") == umkmid
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context)=> ProductFormScreen(
+                        umkmid: umkmid,
+                        productid: "",
+                        name: "",
+                        description: "",
+                        image: "",
+                        price: 0)));
+              },
+              label: Text("Tambah Produk"),
+              icon: Icon(Icons.add),
+              backgroundColor: ConstColor.sbmdarkBlue,
+            )
+          : Container(),
+      floatingActionButtonLocation: AlmostEndFloatFabLocation(),
     );
   }
 
@@ -134,4 +226,25 @@ class StoreProduct extends StatelessWidget {
   //               )))
   //     ]),
   //   ));
+}
+
+class AlmostEndFloatFabLocation extends StandardFabLocation
+    with FabEndOffsetX, FabFloatOffsetY {
+  @override
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment =
+        scaffoldGeometry.textDirection == TextDirection.ltr ? 5.0 : 0;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
+  }
+
+  @override
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment =
+        scaffoldGeometry.textDirection == TextDirection.ltr ? 350 : -10;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
+  }
 }

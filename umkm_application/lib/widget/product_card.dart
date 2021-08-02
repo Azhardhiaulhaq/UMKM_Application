@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:get/get.dart';
 import 'package:umkm_application/ProductDetail/ui/product_detail.dart';
 
 // ignore: must_be_immutable
@@ -36,17 +36,13 @@ class ProductCard extends StatelessWidget {
         splashColor: Colors.transparent,
         onTap: () { 
           statistics.update({'product' : name, 'count':FieldValue.increment(1)});
-          pushNewScreen(context,
-            screen: ProductDetail(
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetail(
                 context: context,
                 umkmid: umkmid,
-                name: name,
-                description: description,
-                image: image,
-                price: price,
+                productid: productid,
                 tokopedia: tokopedia,
                 shopee : shopee,
-                bukalapak:bukalapak));},
+                bukalapak:bukalapak)));},
         child: Container(
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(16)),

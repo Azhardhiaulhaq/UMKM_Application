@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:umkm_application/Authentication/data/repositories/user_repositories.dart';
+import 'package:umkm_application/data/repositories/user_repositories.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
