@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:umkm_application/Authentication/Login/ui/loginscreen.dart';
 import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/data/repositories/statistic_repositories.dart';
@@ -91,47 +92,59 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         Column(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(image),
+                              backgroundImage: image != '' ? NetworkImage(image) : NetworkImage('https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png'),
                               minRadius: 30,
                               maxRadius: 50,
                             ),
                             SizedBox(
                               height: 5,
                             ),
-                            SizedBox(
-                                height: 25,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    ImagePicker picker = ImagePicker();
-                                    final XFile? image = await picker.pickImage(
-                                        source: ImageSource.gallery);
-                                    File _imageFile = File(image!.path);
-                                    await StoreRepository.updateImage(
-                                        id, _imageFile);
-                                  },
-                                  child: Text('Ubah Foto'),
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 3,
-                                    primary: ConstColor.sbmdarkBlue,
-                                      shape: StadiumBorder()),
-                                )),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            SizedBox(
-                                height: 25,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await UserRepository.signOut();
-                                    Navigator.of(context, rootNavigator: true).pop(context);
-                                    
-                                  },
-                                  child: Text('Keluar'),
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 3,
-                                    primary: Colors.redAccent,
-                                      shape: StadiumBorder()),
-                                )),
+                            _userID == id
+                                ? SizedBox(
+                                    height: 25,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        ImagePicker picker = ImagePicker();
+                                        final XFile? image =
+                                            await picker.pickImage(
+                                                source: ImageSource.gallery);
+                                        File _imageFile = File(image!.path);
+                                        await StoreRepository.updateImage(
+                                            id, _imageFile);
+                                      },
+                                      child: Text('Ubah Foto'),
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 3,
+                                          primary: ConstColor.sbmdarkBlue,
+                                          shape: StadiumBorder()),
+                                    ))
+                                : Container(),
+                            _userID == id
+                                ? SizedBox(
+                                    height: 8,
+                                  )
+                                : Container(),
+                            _userID == id
+                                ? SizedBox(
+                                    height: 25,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        await UserRepository.signOut()
+                                            .then((user) {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LoginScreen()));
+                                        });
+                                      },
+                                      child: Text('Keluar'),
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 3,
+                                          primary: Colors.redAccent,
+                                          shape: StadiumBorder()),
+                                    ))
+                                : Container(),
                           ],
                         ),
                         SizedBox(width: 5),
@@ -151,7 +164,10 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text(city + ', ' + province,
+                                Text(
+                                    city != ''
+                                        ? city + ', ' + province
+                                        : 'Lokasi UMKM Belum Ditambahkan',
                                     overflow: TextOverflow.fade,
                                     style: TextStyle(
                                         color: Colors.grey,
@@ -180,7 +196,10 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                   SizedBox(
                                     width: 8,
                                   ),
-                                  Text('0' + phone,
+                                  Text(
+                                      phone != ''
+                                          ? '0' + phone
+                                          : 'Nomor Belum Ditambahkan',
                                       overflow: TextOverflow.fade,
                                       style: TextStyle(
                                           color: Colors.black,
@@ -276,7 +295,9 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            description,
+                            description != ''
+                                ? description
+                                : 'Deskripsi UMKM Belum Ditambahkan',
                             style: GoogleFonts.lato(
                                 color: Colors.black, fontSize: 14),
                             textAlign: TextAlign.justify,
@@ -302,7 +323,9 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            address + ', ' + city + ', ' + province,
+                            city != ''
+                                ? address + ', ' + city + ', ' + province
+                                : 'Lokasi UMKM Belum Ditambahkan',
                             style: GoogleFonts.lato(
                                 color: Colors.black, fontSize: 14),
                             textAlign: TextAlign.justify,
@@ -325,46 +348,52 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text('+62 ' + phone,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Icon(MdiIcons.whatsapp,
-                                  color: Colors.green, size: 30),
-                              onPressed: () {
-                                share('62' + phone, 'Halo');
-                              },
-                            )),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text(instagram,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Icon(MdiIcons.instagram,
-                                  color: Color(0xffE1306C), size: 30),
-                              onPressed: () {
-                                openLink('https://www.instagram.com/' +
-                                    instagram +
-                                    '/');
-                              },
-                            )),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text(facebook,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Icon(MdiIcons.facebook,
-                                  color: Color(0xff4267B2), size: 30),
-                              onPressed: () {
-                                openLink('https://www.facebook.com/' +
-                                    facebook +
-                                    '/');
-                              },
-                            )),
+                        phone != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text('+62 ' + phone,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Icon(MdiIcons.whatsapp,
+                                      color: Colors.green, size: 30),
+                                  onPressed: () {
+                                    share('62' + phone, 'Halo');
+                                  },
+                                ))
+                            : Container(),
+                        instagram != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text(instagram,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Icon(MdiIcons.instagram,
+                                      color: Color(0xffE1306C), size: 30),
+                                  onPressed: () {
+                                    openLink('https://www.instagram.com/' +
+                                        instagram +
+                                        '/');
+                                  },
+                                ))
+                            : Container(),
+                        facebook != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text(facebook,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Icon(MdiIcons.facebook,
+                                      color: Color(0xff4267B2), size: 30),
+                                  onPressed: () {
+                                    openLink('https://www.facebook.com/' +
+                                        facebook +
+                                        '/');
+                                  },
+                                ))
+                            : Container(),
                         SizedBox(
                           height: 20,
                         ),
@@ -382,56 +411,66 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text(tokopedia,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Image.asset("assets/tokopedia.png",
-                                  width: 30, height: 30),
-                              onPressed: () {
-                                StatisticRepository.updateStatistic(id, 'tokopedia');
-                                openLink('https://www.tokopedia.com/' +
-                                    tokopedia +
-                                    '/');
-                              },
-                            )),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text(shoope,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Image.asset("assets/shopee.png",
-                                  width: 30, height: 30),
-                              onPressed: () {
-                                StatisticRepository.updateStatistic(id, 'shopee');
-                                openLink(
-                                    'https://www.shopee.co.id/' + shoope + '/');
-                              },
-                            )),
-                        Container(
-                            alignment: Alignment.topLeft,
-                            child: TextButton.icon(
-                              label: Text(bukalapak,
-                                  style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
-                              icon: Image.asset("assets/bukalapak.png",
-                                  width: 30, height: 30),
-                              onPressed: () {
-                                StatisticRepository.updateStatistic(id, 'bukalapak');
-                                openLink('https://www.bukalapak.com/' +
-                                    bukalapak +
-                                    '/');
-                              },
-                            )),
+                        tokopedia != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text(tokopedia,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Image.asset("assets/tokopedia.png",
+                                      width: 30, height: 30),
+                                  onPressed: () {
+                                    StatisticRepository.updateStatistic(
+                                        id, 'tokopedia');
+                                    openLink('https://www.tokopedia.com/' +
+                                        tokopedia +
+                                        '/');
+                                  },
+                                ))
+                            : Container(),
+                        shoope != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text(shoope,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Image.asset("assets/shopee.png",
+                                      width: 30, height: 30),
+                                  onPressed: () {
+                                    StatisticRepository.updateStatistic(
+                                        id, 'shopee');
+                                    openLink('https://www.shopee.co.id/' +
+                                        shoope +
+                                        '/');
+                                  },
+                                ))
+                            : Container(),
+                        bukalapak != ''
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child: TextButton.icon(
+                                  label: Text(bukalapak,
+                                      style: GoogleFonts.lato(
+                                          color: Colors.black, fontSize: 14)),
+                                  icon: Image.asset("assets/bukalapak.png",
+                                      width: 30, height: 30),
+                                  onPressed: () {
+                                    StatisticRepository.updateStatistic(
+                                        id, 'bukalapak');
+                                    openLink('https://www.bukalapak.com/' +
+                                        bukalapak +
+                                        '/');
+                                  },
+                                ))
+                            : Container(),
                       ]))))),
     );
   }
 
   Future<void> initPreference() async {
-    _userID = await PrefRepository.getUserID()??'';
+    _userID = await PrefRepository.getUserID() ?? '';
   }
 
   @override
@@ -483,7 +522,10 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               snapshot.data!.get('email'),
                               snapshot.data!.get('phone_number')),
                           SizedBox(height: 5),
-                          _videoPromotion(snapshot.data!.get('youtube_link')),
+                          snapshot.data!.get('youtube_link') != ''
+                              ? _videoPromotion(
+                                  snapshot.data!.get('youtube_link'))
+                              : Container(),
                           SizedBox(height: 5),
                           _descriptionStore(
                               snapshot.data!.get('description'),
