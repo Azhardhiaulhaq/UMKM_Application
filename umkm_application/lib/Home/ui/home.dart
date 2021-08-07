@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
         isGreaterThanOrEqualTo: searchQuery,
         isLessThan: searchQuery.substring(0, searchQuery.length - 1) +
             String.fromCharCode(searchQuery.codeUnitAt(searchQuery.length - 1) + 1),
-      ).where("tag", arrayContainsAny: categorySelected).snapshots() : users.where("tag", arrayContainsAny: categorySelected).snapshots();;
+      ).where("tag", arrayContainsAny: categorySelected).snapshots() : users.where("tag", arrayContainsAny: categorySelected).snapshots();
   }
 
   Widget _storeCard() {

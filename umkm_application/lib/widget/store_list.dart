@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
+import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 
 // ignore: must_be_immutable
 class StoreList extends StatelessWidget {
@@ -57,7 +57,7 @@ class StoreList extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: () {
-                statistics.update({'store': FieldValue.increment(1)});
+                StatisticRepository.updateStatistic(id, 'store');
                 Navigator.push(
                     context,
                     MaterialPageRoute(

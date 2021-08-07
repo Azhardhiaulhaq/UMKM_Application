@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
+
 
 // ignore: must_be_immutable
 class EventDetail extends StatelessWidget {

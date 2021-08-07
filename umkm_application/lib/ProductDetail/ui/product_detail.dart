@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:meta/meta.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
+import 'package:umkm_application/data/repositories/pref_repositories.dart';
+import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:whatsapp_share/whatsapp_share.dart';
 
+// ignore: must_be_immutable
 class ProductDetail extends StatefulWidget {
   ProductDetail(
       {Key? key,
@@ -54,7 +54,7 @@ class _ProductDetailState extends State<ProductDetail> {
       required this.tokopedia,
       required this.shopee,
       required this.bukalapak});
-  late SharedPreferences prefs;
+    late String _userID;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> share(String phone, String text) async {
@@ -190,8 +190,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/tokopedia.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    statistics.update(
-                                        {'tokopedia': FieldValue.increment(1)});
+                                    StatisticRepository.updateStatistic(umkmid, 'tokopedia');
                                     openLink('https://www.tokopedia.com/' +
                                         tokopedia +
                                         '/');
@@ -206,8 +205,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/shopee.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    statistics.update(
-                                        {'shopee': FieldValue.increment(1)});
+                                    StatisticRepository.updateStatistic(umkmid, 'shopee');
                                     openLink('https://www.shopee.co.id/' +
                                         shopee +
                                         '/');
@@ -222,8 +220,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/bukalapak.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    statistics.update(
-                                        {'bukalapak': FieldValue.increment(1)});
+                                    StatisticRepository.updateStatistic(umkmid, 'bukalapak');
                                     openLink('https://www.bukalapak.com/' +
                                         bukalapak +
                                         '/');
@@ -238,7 +235,7 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Future<void> initPreference() async {
-    this.prefs = await SharedPreferences.getInstance();
+    _userID = await PrefRepository.getUserID()??'';
   }
 
   @override
@@ -304,7 +301,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       )))
             ]),
           ),
-          floatingActionButton: this.prefs.getString("userid") == umkmid
+          floatingActionButton: _userID == umkmid
               ? Column(
                   children: [
                     FloatingActionButton.extended(

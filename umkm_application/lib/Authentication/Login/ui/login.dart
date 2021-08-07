@@ -25,6 +25,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
+  // late DocumentReference statistics;
   late LoginBloc _loginBloc;
   bool isEmailValid = false;
   bool isPasswordValid = false;
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false, Icon? entryIcon = null}) {
+      {bool isPassword = false, Icon? entryIcon}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -124,6 +125,18 @@ class _LoginPageState extends State<LoginPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
+              // QuerySnapshot<Map<String, dynamic>> statistics = await FirebaseFirestore.instance.collection('statistics').doc("DgBAPMpCbPYuvnR8vUz6cEL9JpH2").collection("dates").where("date",isLessThan: Timestamp.fromMillisecondsSinceEpoch(1627923630200)).get();
+              // var docId = statistics.docs;
+              // print(docId);
+              // DateTime date = DateTime.now();
+              // DateTime date2 = DateTime.parse('2021-08-03');
+              // DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+              // print(dateFormat.format(date));
+              // DateTime date3 = DateTime.parse(dateFormat.format(date));
+              // print(date.millisecondsSinceEpoch.toString());
+              // print(date2.millisecondsSinceEpoch.toString());
+              // print(date3.millisecondsSinceEpoch.toString());
+              
               _loginBloc.add(SignInButtonPressed(
                   email: emailController.text,
                   password: passwordController.text));
@@ -191,6 +204,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     final height = MediaQuery.of(context).size.height;
     return BlocListener<LoginBloc, LoginState>(listener: (context, state) {
       if (state is LoginFailed) {

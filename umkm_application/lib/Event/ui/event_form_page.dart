@@ -6,7 +6,6 @@
 import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,7 +114,7 @@ class _EventFormPageState extends State<EventFormPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false, bool isCP = false, Icon? entryIcon = null}) {
+      {bool isPassword = false, bool isCP = false, Icon? entryIcon}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(

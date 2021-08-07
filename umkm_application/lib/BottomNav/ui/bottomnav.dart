@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:umkm_application/Statistic/ui/statistic.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
-import 'package:umkm_application/data/repositories/user_repositories.dart';
+import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_list.dart';
 import 'package:umkm_application/Home/ui/home.dart';
@@ -20,10 +20,10 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   late PersistentTabController _controller;
   late bool _hideNavBar;
-  late SharedPreferences prefs;
+  late String _userID;
 
   Future<void> initPreference() async {
-    this.prefs = await SharedPreferences.getInstance();
+    _userID = await PrefRepository.getUserID() ?? '';
   }
 
   @override
@@ -43,11 +43,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
       Text(
         'Index 3: Coaching Clinic',
       ),
-      Text(
-        'Index 2: Statistic',
-      ),
+      Statistic(uid: _userID),
       StoreDetail(
-        uid: this.prefs.getString("userid")!,
+        uid: _userID,
       )
     ];
   }

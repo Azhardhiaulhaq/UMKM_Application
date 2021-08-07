@@ -3,8 +3,9 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_detail.dart';
 import 'package:intl/intl.dart'; 
-import 'package:intl/date_symbol_data_local.dart'; 
 
+
+// ignore: must_be_immutable
 class EventCard extends StatelessWidget {
   String name;
   String author;

@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
+import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/widget/product_card.dart';
 
 class StoreProduct extends StatefulWidget {
@@ -46,7 +45,7 @@ class _StoreProductState extends State<StoreProduct> {
       required this.tokopedia,
       required this.shopee,
       required this.bukalapak});
-  late SharedPreferences prefs;
+    late String _userID;
   Widget _search() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -144,7 +143,7 @@ class _StoreProductState extends State<StoreProduct> {
   }
 
   Future<void> initPreference() async {
-    this.prefs = await SharedPreferences.getInstance();
+    _userID = await PrefRepository.getUserID()??'';
   }
 
   @override
@@ -173,7 +172,7 @@ class _StoreProductState extends State<StoreProduct> {
           SizedBox(height: 100),
         ],
       ),
-      floatingActionButton: this.prefs.getString("userid") == umkmid
+      floatingActionButton: _userID == umkmid
           ? FloatingActionButton.extended(
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (context)=> ProductFormScreen(

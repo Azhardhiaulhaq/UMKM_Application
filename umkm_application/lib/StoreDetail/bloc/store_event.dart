@@ -9,6 +9,7 @@ abstract class StoreEvent extends Equatable {
 
 class updateStore extends StoreEvent {
   String address,
+      // ignore: non_constant_identifier_names
       bukalapak_name,
       city,
       description,

@@ -50,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false, Icon? entryIcon = null}) {
+      {bool isPassword = false, Icon? entryIcon}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(

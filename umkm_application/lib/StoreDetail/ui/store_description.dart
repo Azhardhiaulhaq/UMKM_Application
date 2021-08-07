@@ -1,16 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
+import 'package:umkm_application/data/repositories/pref_repositories.dart';
+import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 import 'package:umkm_application/data/repositories/user_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
-import 'package:umkm_application/main.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:umkm_application/data/repositories/store_repositories.dart';
@@ -18,6 +16,7 @@ import 'package:umkm_application/data/repositories/store_repositories.dart';
 import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class StoreDescription extends StatefulWidget {
   StoreDescription({
     Key? key,
@@ -47,7 +46,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
     required this.context,
     required this.id,
   });
-  late SharedPreferences prefs;
+  late String _userID;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> share(String phone, String text) async {
@@ -392,8 +391,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               icon: Image.asset("assets/tokopedia.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update(
-                                    {'tokopedia': FieldValue.increment(1)});
+                                StatisticRepository.updateStatistic(id, 'tokopedia');
                                 openLink('https://www.tokopedia.com/' +
                                     tokopedia +
                                     '/');
@@ -408,8 +406,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               icon: Image.asset("assets/shopee.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update(
-                                    {'shopee': FieldValue.increment(1)});
+                                StatisticRepository.updateStatistic(id, 'shopee');
                                 openLink(
                                     'https://www.shopee.co.id/' + shoope + '/');
                               },
@@ -423,8 +420,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               icon: Image.asset("assets/bukalapak.png",
                                   width: 30, height: 30),
                               onPressed: () {
-                                statistics.update(
-                                    {'bukalapak': FieldValue.increment(1)});
+                                StatisticRepository.updateStatistic(id, 'bukalapak');
                                 openLink('https://www.bukalapak.com/' +
                                     bukalapak +
                                     '/');
@@ -435,7 +431,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
   }
 
   Future<void> initPreference() async {
-    this.prefs = await SharedPreferences.getInstance();
+    _userID = await PrefRepository.getUserID()??'';
   }
 
   @override
@@ -507,7 +503,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                       )))
             ]),
           ),
-          floatingActionButton: this.prefs.getString("userid") == id
+          floatingActionButton: _userID == id
               ? FloatingActionButton.extended(
                   onPressed: () {
                     Navigator.push(

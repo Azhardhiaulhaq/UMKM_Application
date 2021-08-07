@@ -3,7 +3,6 @@
 // Github : TheAlphamerc/flutter_login_signup //
 // ------------------------------------------ //
 
-import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/ButtonTextStyle.dart';
@@ -13,9 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:umkm_application/Const/const_color.dart';
-import 'package:umkm_application/Event/bloc/bloc/event_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:umkm_application/StoreDetail/bloc/store_bloc.dart';
 
@@ -148,7 +145,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false, bool isCP = false, Icon? entryIcon = null}) {
+      {bool isPassword = false, bool isCP = false, Icon? entryIcon}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(

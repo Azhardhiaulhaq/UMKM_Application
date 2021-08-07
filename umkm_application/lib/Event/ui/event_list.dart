@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
-import 'package:umkm_application/Event/ui/event_form_page.dart';
 import 'package:umkm_application/Event/ui/event_form_page_screen.dart';
-import 'package:umkm_application/Model/data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/widget/event_card.dart';
 

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:image_picker/image_picker.dart';
@@ -83,7 +82,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   Widget _entryField(
       String title, String hintText, TextEditingController controller,
-      {bool isPassword = false, bool isCP = false, Icon? entryIcon = null}) {
+      {bool isPassword = false, bool isCP = false, Icon? entryIcon}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
