@@ -23,3 +23,26 @@ class addEventButtonPressed extends EventEvent {
       required this.date,
       required this.imageFile});
 }
+
+class updateEventButtonPressed extends EventEvent {
+  String eventID,author,contactPerson,description,link,location,name, imageLink;
+  File image;
+  DateTime date;
+
+  updateEventButtonPressed(
+      {required this.eventID,
+      required this.author,
+      required this.contactPerson,
+      required this.description,
+      required this.image,
+      required this.link,
+      required this.imageLink,
+      required this.location,
+      required this.name,
+      required this.date});
+}
+
+class deleteEventButtonPressed extends EventEvent{
+  String eventID;
+  deleteEventButtonPressed({required this.eventID});
+}

@@ -63,6 +63,7 @@ class _EventPageState extends State<EventPage> {
           children: snapshot.data!.docs
               .map(
                 (e) => EventCard(
+                  eventID: e.id,
                   author: e.get('author'),
                   bannerImage: e.get('banner_image'),
                   contactPerson: e.get('contact_person'),
@@ -188,7 +189,18 @@ class _EventPageState extends State<EventPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          pushNewScreen(context, screen: EventFormScreen());
+          pushNewScreen(context,
+              screen: EventFormScreen(
+                author: '',
+                contactPerson: '',
+                date: DateTime.now(),
+                description: '',
+                eventID: '',
+                link: '',
+                linkImage: '',
+                location: '',
+                name: '',
+              ));
         },
         label: Text("Tambah Event"),
         icon: Icon(Icons.event_outlined),

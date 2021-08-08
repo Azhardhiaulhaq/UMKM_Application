@@ -14,6 +14,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/bloc/bloc/event_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:umkm_application/Event/ui/event_list.dart';
 
 class EventFormPage extends StatefulWidget {
   EventFormPage(
@@ -30,16 +31,16 @@ class EventFormPage extends StatefulWidget {
       required this.linkImage})
       : super(key: key);
 
-  final String title;
-  final String eventID;
-  final String name;
-  final String location;
-  final String description;
-  final String author;
-  final String link;
-  final String contactPerson;
-  final String linkImage;
-  final DateTime date;
+  String title;
+  String eventID;
+  String name;
+  String location;
+  String description;
+  String author;
+  String link;
+  String contactPerson;
+  String linkImage;
+  DateTime date;
   @override
   _EventFormPageState createState() => _EventFormPageState(
       eventID: eventID,
@@ -172,12 +173,14 @@ class _EventFormPageState extends State<EventFormPage> {
           SfDateRangePicker(
             onSelectionChanged: _onSelectionChanged,
             selectionMode: DateRangePickerSelectionMode.single,
+            initialSelectedDate: eventID != "" ? _selectedDate : DateTime.now(),
+            initialDisplayDate: eventID != "" ? _selectedDate : DateTime.now(),
             initialSelectedRange: PickerDateRange(
                 eventID != ""
-                    ? date.subtract(const Duration(days: 4))
+                    ? _selectedDate.subtract(const Duration(days: 4))
                     : DateTime.now().subtract(const Duration(days: 4)),
                 eventID != ""
-                    ? date.add(const Duration(days: 3))
+                    ? _selectedDate.add(const Duration(days: 3))
                     : DateTime.now().add(const Duration(days: 3))),
           )
         ],
@@ -265,21 +268,65 @@ class _EventFormPageState extends State<EventFormPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              _eventBloc.add(addEventButtonPressed(
-                  name: nameController.text,
-                  location: locController.text,
-                  description: descController.text,
-                  author: authorController.text,
-                  contactPerson: cpController.text,
-                  link: linkController.text,
-                  date: _selectedDate,
-                  imageFile: _imageFile));
+              eventID != ''
+                  ? _eventBloc.add(updateEventButtonPressed(
+                      eventID: eventID,
+                      author: authorController.text,
+                      contactPerson: cpController.text,
+                      description: descController.text,
+                      image: _imageFile,
+                      link: linkController.text,
+                      imageLink: linkImage,
+                      location: locController.text,
+                      name: nameController.text,
+                      date: _selectedDate))
+                  : _eventBloc.add(addEventButtonPressed(
+                      name: nameController.text,
+                      location: locController.text,
+                      description: descController.text,
+                      author: authorController.text,
+                      contactPerson: cpController.text,
+                      link: linkController.text,
+                      date: _selectedDate,
+                      imageFile: _imageFile));
             },
             child: Container(
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text(eventID != "" ? "Update Event" :'Tambahkan Event',
+                child: Text(eventID != "" ? "Update Event" : 'Tambahkan Event',
+                    style: TextStyle(fontSize: 20, color: Colors.white))),
+          )),
+    );
+  }
+
+  Widget _deleteButton(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.grey.shade200,
+                offset: Offset(2, 4),
+                blurRadius: 5,
+                spreadRadius: 2)
+          ],
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Colors.redAccent, Colors.redAccent])),
+      child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            splashColor: Colors.blueGrey,
+            onTap: () async {
+              _eventBloc.add(deleteEventButtonPressed(eventID: eventID));
+            },
+            child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Text("Hapus Event",
                     style: TextStyle(fontSize: 20, color: Colors.white))),
           )),
     );
@@ -352,9 +399,10 @@ class _EventFormPageState extends State<EventFormPage> {
 
   @override
   void initState() {
-    super.initState();
+    print(eventID);
     initVariable();
     _eventBloc = BlocProvider.of<EventBloc>(context);
+    super.initState();
   }
 
   @override
@@ -377,7 +425,27 @@ class _EventFormPageState extends State<EventFormPage> {
           isLoading = false;
         });
         Flushbar(
-          title: "Penambahan Event Gagal",
+          title: eventID != ""
+              ? "Penyuntingan Event Gagal"
+              : "Penambahan Event Gagal",
+          titleColor: Colors.white,
+          message: state.message,
+          messageColor: Colors.white,
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xffffae88),
+          flushbarPosition: FlushbarPosition.TOP,
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          leftBarIndicatorColor: Colors.blue[300],
+        )..show(context);
+      }
+      if (state is DeleteEventFailed) {
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          title: "Penghapusan Event Gagal",
           titleColor: Colors.white,
           message: state.message,
           messageColor: Colors.white,
@@ -391,6 +459,25 @@ class _EventFormPageState extends State<EventFormPage> {
         )..show(context);
       }
 
+      if (state is DeleteEventSucceed) {
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          title: "Penghapusan Event Berhasil",
+          titleColor: Colors.white,
+          message: "Event Berhasil Dihapus.",
+          messageColor: Colors.white,
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xffffae88),
+          flushbarPosition: FlushbarPosition.TOP,
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          leftBarIndicatorColor: Colors.blue[300],
+        )..show(context).then((r) => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => EventPage())));
+      }
       if (state is EventLoading) {
         print('loading');
         setState(() {
@@ -404,9 +491,13 @@ class _EventFormPageState extends State<EventFormPage> {
         });
 
         Flushbar(
-          title: "Penambahan Event Berhasil",
+          title: eventID != ""
+              ? "Penyuntingan Event Berhasil"
+              : "Penambahan Event Berhasil",
           titleColor: Colors.white,
-          message: "Event Berhasil Ditambahkan.",
+          message: eventID != ""
+              ? "Informasi Event Berhasil Diubah."
+              : "Informasi Event Berhasil Ditambahkan",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
           backgroundColor: Color(0xff039487),
@@ -439,6 +530,10 @@ class _EventFormPageState extends State<EventFormPage> {
                           height: 20,
                         ),
                         _submitButton(context),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        _deleteButton(context),
                         SizedBox(height: height * .15),
                       ],
                     ),

@@ -5,8 +5,18 @@ import 'package:umkm_application/Event/bloc/bloc/event_bloc.dart';
 import 'package:umkm_application/Event/ui/event_form_page.dart';
 
 class EventFormScreen extends StatelessWidget {
+    final String eventID;
+  final String name;
+  final String location;
+  final String description;
+  final String author;
+  final String link;
+  final String contactPerson;
+  final String linkImage;
+  final DateTime date;
   const EventFormScreen({
-    Key? key,
+    Key? key, required this.eventID,required this.name, required this.location,required this.description,required this.author,
+    required this.contactPerson, required this.linkImage, required this.date, required this.link, 
   }) : super(key: key);
 
   @override
@@ -21,15 +31,15 @@ class EventFormScreen extends StatelessWidget {
           create: (context) => EventBloc(),
           child: EventFormPage(
             title: 'Event Form',
-            author: '',
-            contactPerson: '',
-            date: DateTime.now(),
-            description: '',
-            eventID: '',
-            link: '',
-            linkImage: '',
-            location: '',
-            name: '',
+            author: author,
+            contactPerson: contactPerson,
+            date: date,
+            description: description,
+            eventID: eventID,
+            link: link,
+            linkImage: linkImage,
+            location: location,
+            name: name,
           )),
     );
   }

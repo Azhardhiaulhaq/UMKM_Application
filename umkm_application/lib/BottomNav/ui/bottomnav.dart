@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:umkm_application/Coaching/ui/coaching.dart';
 import 'package:umkm_application/Statistic/ui/statistic.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
@@ -40,9 +41,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return [
       HomePage(title: "Home Page"),
       EventPage(),
-      Text(
-        'Index 3: Coaching Clinic',
-      ),
+      CoachingPage(title: "Coaching"),
       Statistic(uid: _userID),
       StoreDetail(
         uid: _userID,

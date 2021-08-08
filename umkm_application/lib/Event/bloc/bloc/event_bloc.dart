@@ -35,6 +35,32 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       } catch (e) {
         yield EventFailed(message: e.toString());
       }
+    } else if (event is updateEventButtonPressed) {
+      yield EventLoading();
+      try {
+        await EventRepository.updateEvent(
+            event.eventID,
+            event.author,
+            event.imageLink,
+            event.image,
+            event.contactPerson,
+            event.date,
+            event.description,
+            event.link,
+            event.location,
+            event.name);
+        yield EventSucceed();
+      } catch (e) {
+        yield EventFailed(message: e.toString());
+      }
+    } else if (event is deleteEventButtonPressed) {
+      yield EventLoading();
+      try {
+        await EventRepository.deleteProduct(event.eventID);
+        yield DeleteEventSucceed();
+      } catch (e) {
+        yield DeleteEventFailed(message: e.toString());
+      }
     }
   }
 }

@@ -87,9 +87,7 @@ class StoreRepository {
 
   static Future<void> deleteProduct(String uid, String productid) async{
     try{
-      print("masuk delete");
       await users.doc(uid).collection('products').doc(productid).delete();
-      print("selesai delete");
     } catch(e){
       print(e);
     }

@@ -46,4 +46,45 @@ class EventRepository {
       print(e.toString());
     }
   }
+
+  static Future<void> updateEvent(String eventID, String author, String imageLink,
+      File image, String contact_person, DateTime date, String description, String link, 
+      String location, String name) async {
+    try {
+      var urlDownload;
+      if (File(image.path).existsSync()) {
+        String fileName = basename(image.path);
+        var firebaseStorageRef = FirebaseStorage.instance
+            .ref()
+            .child('events')
+            .child('$fileName');
+        UploadTask uploadTask = firebaseStorageRef.putFile(image);
+        var taskSnapshot = await uploadTask.whenComplete(() {});
+        urlDownload = await taskSnapshot.ref.getDownloadURL();
+      } else {
+        urlDownload = imageLink;
+      }
+
+      await events.doc(eventID).update({
+        'author' : author,
+        'banner_image' : urlDownload,
+        'contact_person' : contact_person,
+        'date' : Timestamp.fromDate(date),
+        'description' : description,
+        'link' : link,
+        'location' : location,
+        'name' : name,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+    static Future<void> deleteProduct(String eventID) async{
+    try{
+      await events..doc(eventID).delete();
+    } catch(e){
+      print(e);
+    }
+  }
 }

@@ -1,37 +1,32 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Event/ui/event_form_page_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:intl/intl.dart';
 
-
-// ignore: must_be_immutable
-class EventDetail extends StatelessWidget {
-  final BuildContext context;
-  String name;
-  String author;
-  String bannerImage;
-  String contactPerson;
-  DateTime date;
-  String description;
-  String link;
-  String location;
-  EventDetail(
-      {Key? key,
-      required this.context,
-      required this.name,
-      required this.author,
-      required this.bannerImage,
-      required this.contactPerson,
-      required this.date,
-      required this.description,
-      required this.link,
-      required this.location})
+class EventDetail extends StatefulWidget {
+  EventDetail({Key? key, required this.context, required this.eventID})
       : super(key: key);
+  final BuildContext context;
+  String eventID;
+
+  @override
+  _EventDetailState createState() => _EventDetailState(
+        context: context,
+        eventID: eventID,
+      );
+}
+
+class _EventDetailState extends State<EventDetail> {
+  CollectionReference events = FirebaseFirestore.instance.collection('events');
+  final BuildContext context;
+  String eventID;
+  _EventDetailState({required this.context, required this.eventID});
 
   Future<void> share(String phone, String text) async {
     await WhatsappShare.share(
@@ -89,7 +84,7 @@ class EventDetail extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name,
+                        Text(name != '' ? name : "Event belum mempunyai nama",
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.black,
@@ -115,12 +110,14 @@ class EventDetail extends StatelessWidget {
                           height: 10,
                         ),
                         Row(children: <Widget>[
-                          Icon(Icons.location_city,
-                              color: Colors.redAccent),
+                          Icon(Icons.location_city, color: Colors.redAccent),
                           SizedBox(
                             width: 8,
                           ),
-                          Text(location,
+                          Text(
+                              location != ''
+                                  ? location
+                                  : "Belum ada lokasi Event",
                               overflow: TextOverflow.fade,
                               style: TextStyle(
                                   color: Colors.black,
@@ -130,7 +127,10 @@ class EventDetail extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        Text('Oleh : ' + author,
+                        Text(
+                            author != ''
+                                ? 'Oleh : ' + author
+                                : 'Belum ada author',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.black,
@@ -142,7 +142,7 @@ class EventDetail extends StatelessWidget {
         ));
   }
 
-  Widget _eventDescription(String description) {
+  Widget _eventDescription(String description, String contactPerson) {
     return Material(
         color: Colors.transparent,
         child: InkWell(
@@ -168,7 +168,10 @@ class EventDetail extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        Text(description,
+                        Text(
+                            description != ''
+                                ? description
+                                : 'Belum ada deskripsi event',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.black,
@@ -178,7 +181,7 @@ class EventDetail extends StatelessWidget {
                         SizedBox(
                           height: 20,
                         ),
-                        Text('Contact Person',
+                        Text('Narahubung',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.black,
@@ -190,13 +193,18 @@ class EventDetail extends StatelessWidget {
                         Container(
                             alignment: Alignment.topLeft,
                             child: TextButton.icon(
-                              label: Text('+62 ' + contactPerson,
+                              label: Text(
+                                  contactPerson != ''
+                                      ? '+62 ' + contactPerson
+                                      : 'Belum ada narahubung',
                                   style: GoogleFonts.lato(
                                       color: Colors.black, fontSize: 14)),
                               icon: Icon(MdiIcons.whatsapp,
                                   color: Colors.green, size: 30),
                               onPressed: () {
-                                share('62' + contactPerson, 'Halo');
+                                contactPerson != ''
+                                    ? share('62' + contactPerson, 'Halo')
+                                    : print('Contact Person is null');
                               },
                             )),
                       ],
@@ -211,13 +219,13 @@ class EventDetail extends StatelessWidget {
       child: InkWell(
           splashColor: Colors.transparent,
           onTap: () {
-            openLink(link);
+            link != '' ? openLink(link) : print(link);
           },
           child: Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Card(
-                color: Colors.blue,
+                color: link != '' ? Colors.blue : Colors.grey,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 elevation: 3,
@@ -227,9 +235,11 @@ class EventDetail extends StatelessWidget {
                         height: 20,
                         child: Center(
                           child: Text(
-                            'DAFTAR',
+                            link != ''
+                                ? 'DAFTAR'
+                                : 'BELUM ADA LINK PENDAFTARAN',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: link != '' ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                             textAlign: TextAlign.center,
@@ -241,45 +251,113 @@ class EventDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: ConstColor.sbmdarkBlue,
-          elevation: 1,
-          leading: IconButton(
-              icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
-              onPressed: () => Navigator.pop(context)),
-        ),
-        body: SafeArea(
-          child: Stack(fit: StackFit.expand, children: <Widget>[
-            SingleChildScrollView(
-                child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [
-                          Color(0xfffbfbfb),
-                          Color(0xfff7f7f7),
+    return StreamBuilder<DocumentSnapshot>(
+      stream: events.doc(eventID).snapshots(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text('No Data'),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: ConstColor.sbmdarkBlue,
+            elevation: 1,
+            leading: IconButton(
+                icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                onPressed: () => Navigator.pop(context)),
+          ),
+          body: SafeArea(
+            child: Stack(fit: StackFit.expand, children: <Widget>[
+              SingleChildScrollView(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                            Color(0xfffbfbfb),
+                            Color(0xfff7f7f7),
+                          ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 20),
+                          snapshot.data!.get('banner_image') != ''
+                              ? _eventImage(snapshot.data!.get('banner_image'))
+                              : Container(),
+                          _eventTitle(
+                              snapshot.data!.get('name'),
+                              snapshot.data!.get('author'),
+                              DateFormat.yMMMMd()
+                                  .format(snapshot.data!.get('date').toDate()),
+                              snapshot.data!.get('location')),
+                          _eventDescription(snapshot.data!.get('description'),
+                              snapshot.data!.get('contact_person')),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          _linkButton(snapshot.data!.get('link')),
+                          SizedBox(
+                            height: 100,
+                          ),
                         ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        _eventImage(bannerImage),
-                        _eventTitle(
-                            name, author, DateFormat.yMMMMd().format(date), location),
-                        _eventDescription(description),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        _linkButton(link),
-                        SizedBox(
-                          height: 100,
-                        ),
-                      ],
-                    )))
-          ]),
-        ));
+                      )))
+            ]),
+          ),
+          floatingActionButton: Column(
+            children: [
+              FloatingActionButton.extended(
+                heroTag: null,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventFormScreen(
+                                author: snapshot.data!.get('author'),
+                                contactPerson: snapshot.data!.get('contact_person'),
+                                description: snapshot.data!.get('description'),
+                                date: snapshot.data!.get('date').toDate(),
+                                eventID: eventID,
+                                link: snapshot.data!.get('link'),
+                                linkImage: snapshot.data!.get('banner_image'),
+                                location: snapshot.data!.get('location'),
+                                name: snapshot.data!.get('name'),
+                              )));
+                },
+                label: Text("Sunting Event"),
+                icon: Icon(Icons.edit),
+                backgroundColor: ConstColor.sbmdarkBlue,
+              ),
+            ],
+          ),
+          floatingActionButtonLocation: AlmostEndFloatFabLocation(),
+        );
+      },
+    );
+  }
+}
+
+class AlmostEndFloatFabLocation extends StandardFabLocation
+    with FabEndOffsetX, FabFloatOffsetY {
+  @override
+  double getOffsetX(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment = 5;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
+  }
+
+  @override
+  double getOffsetY(
+      ScaffoldPrelayoutGeometry scaffoldGeometry, double adjustment) {
+    final double directionalAdjustment = 500;
+    return super.getOffsetX(scaffoldGeometry, adjustment) +
+        directionalAdjustment;
   }
 }
