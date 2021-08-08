@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Authentication/Login/bloc/bloc/login_bloc.dart';
 import 'package:umkm_application/Authentication/Signup/ui/signupscreen.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../widget/bezierContainer.dart';
 
 class CoachingPage extends StatefulWidget {
@@ -43,6 +44,46 @@ class _CoachingPageState extends State<CoachingPage> {
     );
   }
 
+  Widget _coachingButton(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.grey.shade200,
+                offset: Offset(2, 4),
+                blurRadius: 5,
+                spreadRadius: 2)
+          ],
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
+      child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            splashColor: Colors.blueGrey,
+            onTap: () async {
+              openLink('https://datalab.sbm-itb.org/coaching-clinic-2/');
+            },
+            child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Text('Ikuti Coaching Clinic',
+                    style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
+          )),
+    );
+  }
+
+  void openLink(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, universalLinksOnly: true);
+    } else {
+      print('There was a problem to open the url: $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -53,7 +94,7 @@ class _CoachingPageState extends State<CoachingPage> {
         children: <Widget>[
           Expanded(
             child: Container(
-              color: ConstColor.lightBluePastelBG,
+              color: ConstColor.backgroundDatalab,
             ),
           ),
           Center(
@@ -68,9 +109,10 @@ class _CoachingPageState extends State<CoachingPage> {
                       'UMKM CLINIC',
                       style: GoogleFonts.lato(
                           fontWeight: FontWeight.bold,
-                          fontSize: 25,
+                          fontSize: 28,
                           color: ConstColor.darkDatalab),
                     ),
+                    SizedBox(height: 10,),
                     Text(
                       'Ikuti Coaching Clinic bersama mentor-mentor terbaik dari Sekolah Bisnis dan Manajemen ITB. Segera atur jadwalnya dan dapatkan ilmu baru untuk membuat UMKM anda melesat.',
                       style: GoogleFonts.lato(
@@ -80,6 +122,10 @@ class _CoachingPageState extends State<CoachingPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    Image(image: AssetImage('assets/conference.png')),
+                    SizedBox(height: 20,),
+                    _coachingButton(context)
+
                   ],
                 ),
               ),

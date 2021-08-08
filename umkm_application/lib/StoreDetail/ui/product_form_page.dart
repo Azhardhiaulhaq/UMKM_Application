@@ -70,10 +70,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
+              child: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
             ),
             Text('Kembali',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:ConstColor.secondaryTextDatalab))
           ],
         ),
       ),
@@ -90,7 +90,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -114,7 +114,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       border: InputBorder.none,
                       prefixIcon: entryIcon,
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                          borderSide: BorderSide(color: ConstColor.darkDatalab),
                           borderRadius: BorderRadius.circular(15)),
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
@@ -152,7 +152,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   border: InputBorder.none,
                   prefixText: 'Rp. ',
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -176,7 +176,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -203,7 +203,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text(productid != "" ? 'Update Produk' : "Tambah Produk",
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
+                    style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -222,7 +222,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [Colors.redAccent, Colors.redAccent])),
+              colors: [ConstColor.failedNotification,ConstColor.failedNotification])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -278,7 +278,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -307,11 +307,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
             "Nama Produk", "Masukkan nama produk", nameProductController,
             entryIcon: Icon(
               Icons.window,
-              color: ConstColor.sbmdarkBlue,
+              color: ConstColor.darkDatalab,
             )),
         _entryField("Deskripsi Produk", "Masukkan deskripsi produk",
             descriptionController,
-            entryIcon: Icon(Icons.list_alt, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.list_alt, color: ConstColor.darkDatalab)),
         _priceEntryField(
           "Harga Produk",
           "Masukkan Harga Produk",
@@ -326,7 +326,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(color: ConstColor.darkDatalab,),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
         ],
@@ -378,7 +378,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -397,7 +397,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: "Produk Berhasil Ditambahkan.",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xff039487),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -416,7 +416,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -436,7 +436,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: "Produk Berhasil Diperbarui.",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xff039487),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -455,7 +455,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -474,7 +474,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           message: "Produk Berhasil Dihapus.",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -529,7 +529,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         child: Container(
                             height: 100,
                             width: 100,
-                            child: CircularProgressIndicator()),
+                            child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
                       )
                     : Container()
               ],

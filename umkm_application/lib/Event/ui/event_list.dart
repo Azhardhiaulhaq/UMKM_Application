@@ -29,7 +29,7 @@ class _EventPageState extends State<EventPage> {
                   children: <Widget>[
                     Text('Event List',
                         style: GoogleFonts.lato(
-                            color: Colors.black,
+                            color:ConstColor.textDatalab,
                             fontSize: 24,
                             fontWeight: FontWeight.w700))
                   ])
@@ -50,7 +50,7 @@ class _EventPageState extends State<EventPage> {
               .snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -103,7 +103,7 @@ class _EventPageState extends State<EventPage> {
                         child: Text(
                           title,
                           style: GoogleFonts.lato(
-                              color: Colors.black,
+                              color: ConstColor.textDatalab,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.start,
@@ -114,7 +114,7 @@ class _EventPageState extends State<EventPage> {
                                 ? Icons.arrow_drop_up_rounded
                                 : Icons.arrow_drop_down_rounded,
                             size: 30,
-                            color: ConstColor.sbmdarkBlue))
+                            color: ConstColor.darkDatalab))
                   ],
                 ))));
   }
@@ -140,7 +140,7 @@ class _EventPageState extends State<EventPage> {
                         child: Text(
                           title,
                           style: GoogleFonts.lato(
-                              color: Colors.black,
+                              color: ConstColor.textDatalab,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.start,
@@ -151,7 +151,7 @@ class _EventPageState extends State<EventPage> {
                                 ? Icons.arrow_drop_up_rounded
                                 : Icons.arrow_drop_down_rounded,
                             size: 30,
-                            color: ConstColor.sbmdarkBlue))
+                            color: ConstColor.darkDatalab))
                   ],
                 ))));
   }
@@ -189,8 +189,8 @@ class _EventPageState extends State<EventPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          pushNewScreen(context,
-              screen: EventFormScreen(
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => EventFormScreen(
                 author: '',
                 contactPerson: '',
                 date: DateTime.now(),
@@ -200,11 +200,11 @@ class _EventPageState extends State<EventPage> {
                 linkImage: '',
                 location: '',
                 name: '',
-              ));
+              )));
         },
         label: Text("Tambah Event"),
         icon: Icon(Icons.event_outlined),
-        backgroundColor: ConstColor.sbmdarkBlue,
+        backgroundColor: ConstColor.darkDatalab,
       ),
       floatingActionButtonLocation: AlmostEndFloatFabLocation(),
     );

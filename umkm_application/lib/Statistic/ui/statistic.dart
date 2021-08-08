@@ -10,6 +10,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
 
 // ignore: must_be_immutable
@@ -178,7 +179,7 @@ class _StatisticPageState extends State<Statistic> {
       stream: statistics.doc(this.uid).collection('dates').orderBy("date",descending: true).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(

@@ -103,10 +103,10 @@ class _EventFormPageState extends State<EventFormPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
+              child: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
             ),
             Text('Kembali',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:ConstColor.secondaryTextDatalab))
           ],
         ),
       ),
@@ -123,7 +123,7 @@ class _EventFormPageState extends State<EventFormPage> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color:ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -137,7 +137,7 @@ class _EventFormPageState extends State<EventFormPage> {
                     selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                   ),
                   ignoreBlank: false,
-                  selectorTextStyle: TextStyle(color: Colors.black),
+                  selectorTextStyle: TextStyle(color: ConstColor.textDatalab),
                   textFieldController: controller,
                 )
               : TextField(
@@ -147,7 +147,7 @@ class _EventFormPageState extends State<EventFormPage> {
                       border: InputBorder.none,
                       prefixIcon: entryIcon,
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                          borderSide: BorderSide(color: ConstColor.darkDatalab),
                           borderRadius: BorderRadius.circular(15)),
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
@@ -175,6 +175,8 @@ class _EventFormPageState extends State<EventFormPage> {
             selectionMode: DateRangePickerSelectionMode.single,
             initialSelectedDate: eventID != "" ? _selectedDate : DateTime.now(),
             initialDisplayDate: eventID != "" ? _selectedDate : DateTime.now(),
+            selectionColor: ConstColor.textDatalab,
+            todayHighlightColor: ConstColor.secondaryTextDatalab,
             initialSelectedRange: PickerDateRange(
                 eventID != ""
                     ? _selectedDate.subtract(const Duration(days: 4))
@@ -226,7 +228,7 @@ class _EventFormPageState extends State<EventFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -262,7 +264,7 @@ class _EventFormPageState extends State<EventFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -295,7 +297,7 @@ class _EventFormPageState extends State<EventFormPage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text(eventID != "" ? "Update Event" : 'Tambahkan Event',
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
+                    style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -314,7 +316,7 @@ class _EventFormPageState extends State<EventFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [Colors.redAccent, Colors.redAccent])),
+              colors: [ConstColor.failedNotification,ConstColor.failedNotification])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -338,23 +340,23 @@ class _EventFormPageState extends State<EventFormPage> {
         _entryField("Nama Event", "Masukkan nama event", nameController,
             entryIcon: Icon(
               Icons.event_outlined,
-              color: ConstColor.sbmdarkBlue,
+              color: ConstColor.darkDatalab,
             )),
         _entryField("Lokasi Event", "Masukkan tempat event diselenggarakan",
             locController,
             entryIcon: Icon(Icons.location_city_outlined,
-                color: ConstColor.sbmdarkBlue)),
+                color: ConstColor.darkDatalab)),
         _entryField("Deskripsi Event", "Deskripsi event yang diselenggarakan",
             descController,
-            entryIcon: Icon(Icons.list_alt, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.list_alt, color: ConstColor.darkDatalab)),
         _entryField("Penyelenggara Event",
             "Masukkan instansi penyelenggara event", authorController,
             entryIcon:
-                Icon(Icons.people_alt_outlined, color: ConstColor.sbmdarkBlue)),
+                Icon(Icons.people_alt_outlined, color: ConstColor.darkDatalab)),
         _entryField("Link Pendaftaran",
             "Masukkan link pendaftaran untuk event apabila ada", linkController,
             entryIcon:
-                Icon(Icons.link_outlined, color: ConstColor.sbmdarkBlue)),
+                Icon(Icons.link_outlined, color: ConstColor.darkDatalab)),
         _entryField("Kontak Panitia",
             "Masukkan Kontak Panitia yang dapat dihubungi", cpController,
             isCP: true),
@@ -368,7 +370,7 @@ class _EventFormPageState extends State<EventFormPage> {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(color: ConstColor.darkDatalab,),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
         ],
@@ -432,7 +434,7 @@ class _EventFormPageState extends State<EventFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -450,7 +452,7 @@ class _EventFormPageState extends State<EventFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -469,7 +471,7 @@ class _EventFormPageState extends State<EventFormPage> {
           message: "Event Berhasil Dihapus.",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -500,7 +502,7 @@ class _EventFormPageState extends State<EventFormPage> {
               : "Informasi Event Berhasil Ditambahkan",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xff039487),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -544,7 +546,7 @@ class _EventFormPageState extends State<EventFormPage> {
                         child: Container(
                             height: 100,
                             width: 100,
-                            child: CircularProgressIndicator()),
+                            child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
                       )
                     : Container()
               ],

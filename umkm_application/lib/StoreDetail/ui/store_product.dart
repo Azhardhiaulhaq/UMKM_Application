@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
@@ -67,10 +68,10 @@ class _StoreProductState extends State<StoreProduct> {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Cari produk yang diinginkan",
-                    hintStyle: TextStyle(fontSize: 12),
+                    hintStyle: GoogleFonts.lato(fontSize: 12, color:ConstColor.textDatalab),
                     contentPadding:
                         EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                    prefixIcon: Icon(Icons.search, color: Colors.black54)),
+                    prefixIcon: Icon(Icons.search, color: ConstColor.darkDatalab)),
               ),
             ),
           ),
@@ -109,7 +110,7 @@ class _StoreProductState extends State<StoreProduct> {
       stream: productStream(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -157,6 +158,7 @@ class _StoreProductState extends State<StoreProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ConstColor.backgroundDatalab,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -185,46 +187,12 @@ class _StoreProductState extends State<StoreProduct> {
               },
               label: Text("Tambah Produk"),
               icon: Icon(Icons.add),
-              backgroundColor: ConstColor.sbmdarkBlue,
+              backgroundColor: ConstColor.darkDatalab,
             )
           : Container(),
       floatingActionButtonLocation: AlmostEndFloatFabLocation(),
     );
   }
-
-  // Scaffold(
-  //       body: SafeArea(
-  //     child: Stack(fit: StackFit.expand, children: <Widget>[
-  //       SingleChildScrollView(
-  //           child: Container(
-  //               padding: EdgeInsets.symmetric(horizontal: 5),
-  //               decoration: BoxDecoration(
-  //                   gradient: LinearGradient(colors: [
-  //                 Color(0xfffbfbfb),
-  //                 Color(0xfff7f7f7),
-  //               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: <Widget>[
-  //                   SizedBox(
-  //                     height: 10,
-  //                   ),
-  //                   _search(),
-  //                   SizedBox(
-  //                     height: 20,
-  //                   ),
-  //                   Container(
-  //                     child: GridView.builder(
-  //                       itemCount: AppData.productList.length,
-  //                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //                           crossAxisCount: 2, childAspectRatio: 0.75),
-  //                       itemBuilder: (context, index) => ProductCard(),
-  //                     ),
-  //                   )
-  //                 ],
-  //               )))
-  //     ]),
-  //   ));
 }
 
 class AlmostEndFloatFabLocation extends StandardFabLocation

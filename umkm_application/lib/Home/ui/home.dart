@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Model/data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/widget/category_tab.dart';
@@ -32,12 +33,12 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Text('Daftar',
                         style: GoogleFonts.lato(
-                            color: Colors.black,
+                            color: ConstColor.textDatalab,
                             fontSize: 24,
                             fontWeight: FontWeight.w400)),
                     Text('Anggota UMKM',
                         style: GoogleFonts.lato(
-                            color: Colors.black,
+                            color: ConstColor.textDatalab,
                             fontSize: 24,
                             fontWeight: FontWeight.w700))
                   ])
@@ -66,10 +67,10 @@ class _HomePageState extends State<HomePage> {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Cari UMKM yang diinginkan",
-                    hintStyle: TextStyle(fontSize: 12),
+                    hintStyle: TextStyle(fontSize: 12, color: ConstColor.textDatalab),
                     contentPadding:
                         EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                    prefixIcon: Icon(Icons.search, color: Colors.black54)),
+                    prefixIcon: Icon(Icons.search, color: ConstColor.textDatalab)),
               ),
             ),
           ),
@@ -101,7 +102,6 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       categorySelected.add(model.name.toLowerCase());
                     }
-                    print(categorySelected);
                     model.isSelected = true;
                   });
                 },
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
       stream: homeStream(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -202,8 +202,8 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
-                  Color(0xfffbfbfb),
-                  Color(0xfff7f7f7),
+                  ConstColor.backgroundDatalab,
+                  ConstColor.backgroundDatalab
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

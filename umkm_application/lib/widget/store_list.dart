@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 import 'package:umkm_application/data/repositories/statistic_repositories.dart';
@@ -79,9 +80,10 @@ class StoreList extends StatelessWidget {
                           direction: Axis.vertical,
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(image),
+                              backgroundImage: NetworkImage(image != '' ? image : 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png') ,
                               minRadius: 30,
                               maxRadius: 50,
+                              backgroundColor: ConstColor.darkDatalab,
                             ),
                             SizedBox(width: 5),
                             VerticalDivider(),
@@ -93,18 +95,18 @@ class StoreList extends StatelessWidget {
                                   children: [
                                     Text(name,
                                         overflow: TextOverflow.fade,
-                                        style: TextStyle(
-                                            color: Colors.black,
+                                        style: GoogleFonts.lato(
+                                            color: ConstColor.textDatalab,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16)),
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text(city + ', ' + province,
+                                    Text(city != '' ? city + ', ' + province : 'Belum ada lokasi',
                                         overflow: TextOverflow.fade,
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
+                                        style: GoogleFonts.lato(
+                                            color: ConstColor.textDatalab,
+                                            fontWeight: FontWeight.normal,
                                             fontSize: 14)),
                                     SizedBox(height: 15),
                                     // _makeLabel("Food"),
@@ -129,8 +131,8 @@ class StoreList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: ConstColor.sbmdarkBlue,
-        border: Border.all(color: ConstColor.sbmdarkBlue, width: 2),
+        color: ConstColor.textDatalab,
+        border: Border.all(color: ConstColor.textDatalab, width: 2),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Color(0xfffbf2ef),
@@ -144,7 +146,7 @@ class StoreList extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(labelCategory,
-              style: TextStyle(
+              style: GoogleFonts.lato(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: Colors.white)),

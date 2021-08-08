@@ -35,7 +35,7 @@ class _StoreDetailState extends State<StoreDetail> {
       stream: users.doc(id).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -48,22 +48,22 @@ class _StoreDetailState extends State<StoreDetail> {
           child: Scaffold(
               backgroundColor: Color(0xfffbfbfb),
               appBar: AppBar(
-                backgroundColor: ConstColor.sbmdarkBlue,
+                backgroundColor: ConstColor.darkDatalab,
                 elevation: 1,
                 leading: IconButton(
-                    icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                    icon: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
                     onPressed: () => Navigator.pop(context)),
                 title: Text(snapshot.data!.get('umkm_name'),
                     style: GoogleFonts.lato(
-                        color: Colors.white,
+                        color: ConstColor.secondaryTextDatalab,
                         fontSize: 20,
                         fontWeight: FontWeight.w700)),
                 bottom: TabBar(
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      color: ConstColor.sbmdarkBlue),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black,
+                      color: ConstColor.darkDatalab),
+                  labelColor: ConstColor.secondaryTextDatalab,
+                  unselectedLabelColor: Colors.white,
                   tabs: [Tab(text: "Description"), Tab(text: "Products")],
                 ),
               ),

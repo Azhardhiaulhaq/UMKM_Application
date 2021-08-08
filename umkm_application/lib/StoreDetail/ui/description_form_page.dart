@@ -133,10 +133,10 @@ class _StoreFormPageState extends State<StoreFormPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
+              child: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
             ),
             Text('Kembali',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:ConstColor.secondaryTextDatalab))
           ],
         ),
       ),
@@ -167,7 +167,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                     selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                   ),
                   ignoreBlank: false,
-                  selectorTextStyle: TextStyle(color: Colors.black),
+                  selectorTextStyle: TextStyle(color: ConstColor.textDatalab),
                   textFieldController: controller,
                 )
               : TextField(
@@ -177,7 +177,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                       border: InputBorder.none,
                       prefixIcon: entryIcon,
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                          borderSide: BorderSide(color: ConstColor.darkDatalab),
                           borderRadius: BorderRadius.circular(15)),
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
@@ -195,7 +195,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Jenis UMKM',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color:ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -203,7 +203,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           CustomCheckBoxGroup(
             buttonTextStyle: ButtonTextStyle(
               selectedColor: Colors.white,
-              unSelectedColor: ConstColor.sbmdarkBlue,
+              unSelectedColor: ConstColor.darkDatalab,
               textStyle: TextStyle(
                 fontSize: 16,
               ),
@@ -229,9 +229,10 @@ class _StoreFormPageState extends State<StoreFormPage> {
             horizontal: false,
             enableButtonWrap: false,
             absoluteZeroSpacing: false,
-            selectedColor: ConstColor.sbmdarkBlue,
+            selectedColor: ConstColor.darkDatalab,
             padding: 10,
-            unSelectedBorderColor: ConstColor.sbmdarkBlue,
+            unSelectedBorderColor: ConstColor.darkDatalab,
+            selectedBorderColor: ConstColor.darkDatalab,
           )
         ],
       ),
@@ -246,7 +247,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Social Media',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -259,7 +260,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   prefixIcon: Icon(MdiIcons.facebook,
                       color: Color(0xff4267B2), size: 30),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -275,7 +276,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   prefixIcon: Icon(MdiIcons.instagram,
                       color: Color(0xffE1306C), size: 30),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -291,7 +292,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   prefixIcon: Icon(MdiIcons.youtube,
                       color: Color(0xffFF0000), size: 30),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -309,7 +310,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Market Place',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color:ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -321,7 +322,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   border: InputBorder.none,
                   prefixText: 'Tokopedia : ',
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -336,7 +337,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   border: InputBorder.none,
                   prefixText: 'Shopee : ',
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -351,7 +352,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                   border: InputBorder.none,
                   prefixText: 'Bukalapak : ',
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                      borderSide: BorderSide(color: ConstColor.darkDatalab),
                       borderRadius: BorderRadius.circular(15)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
@@ -361,90 +362,6 @@ class _StoreFormPageState extends State<StoreFormPage> {
     );
   }
 
-  // Widget _datePicker(String title) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(vertical: 10),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: <Widget>[
-  //         Text(
-  //           title,
-  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-  //         ),
-  //         SizedBox(
-  //           height: 10,
-  //         ),
-  //         SfDateRangePicker(
-  //           onSelectionChanged: _onSelectionChanged,
-  //           selectionMode: DateRangePickerSelectionMode.single,
-  //           initialSelectedRange: PickerDateRange(
-  //               DateTime.now().subtract(const Duration(days: 4)),
-  //               DateTime.now().add(const Duration(days: 3))),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _imagePicker(String title) {
-  //   return Container(
-  //     alignment: Alignment.centerLeft,
-  //     margin: EdgeInsets.symmetric(vertical: 10),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: <Widget>[
-  //         Text(
-  //           title,
-  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-  //         ),
-  //         SizedBox(
-  //           height: 10,
-  //         ),
-  //         Text(_imageFile.path),
-  //         SizedBox(
-  //           height: 10,
-  //         ),
-  //         _imagePickerButton(context)
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _imagePickerButton(BuildContext context) {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.all(Radius.circular(5)),
-  //         boxShadow: <BoxShadow>[
-  //           BoxShadow(
-  //               color: Colors.grey.shade200,
-  //               offset: Offset(2, 4),
-  //               blurRadius: 5,
-  //               spreadRadius: 2)
-  //         ],
-  //         gradient: LinearGradient(
-  //             begin: Alignment.centerLeft,
-  //             end: Alignment.centerRight,
-  //             colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
-  //     child: Material(
-  //         color: Colors.transparent,
-  //         child: InkWell(
-  //           splashColor: Colors.blueGrey,
-  //           onTap: () async {
-  //             final XFile? image =
-  //                 await picker.pickImage(source: ImageSource.gallery);
-  //             setState(() {
-  //               _imageFile = File(image!.path);
-  //             });
-  //           },
-  //           child: Container(
-  //               alignment: Alignment.center,
-  //               width: MediaQuery.of(context).size.width * 0.5,
-  //               padding: EdgeInsets.symmetric(vertical: 10),
-  //               child: Text('Upload Gambar',
-  //                   style: TextStyle(fontSize: 14, color: Colors.white))),
-  //         )),
-  //   );
-  // }
 
   Widget _submitButton(BuildContext context) {
     return Container(
@@ -460,7 +377,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -488,7 +405,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text('Simpan Data',
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
+                    style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -499,29 +416,29 @@ class _StoreFormPageState extends State<StoreFormPage> {
         _entryField("Nama UMKM", "Masukkan nama umkm", umkmController,
             entryIcon: Icon(
               Icons.account_box,
-              color: ConstColor.sbmdarkBlue,
+              color: ConstColor.darkDatalab,
             )),
         _entryField("Alamat UMKM", "Masukkan alamat umkm", addressController,
             entryIcon: Icon(Icons.location_on_outlined,
-                color: ConstColor.sbmdarkBlue)),
+                color: ConstColor.darkDatalab)),
         _entryField("Kota UMKM", "Masukkan kota tempat UMKM", cityController,
             entryIcon: Icon(Icons.location_city_outlined,
-                color: ConstColor.sbmdarkBlue)),
+                color: ConstColor.darkDatalab)),
         _entryField(
           "Provinsi UMKM",
           "Masukkan provinsi tempat UMKM",
           provinceController,
           entryIcon:
-              Icon(Icons.location_city_outlined, color: ConstColor.sbmdarkBlue),
+              Icon(Icons.location_city_outlined, color: ConstColor.darkDatalab),
         ),
         _entryField("Deskripsi UMKM", "Masukkan deskripsi detail mengenai UMKM",
             descriptionController,
-            entryIcon: Icon(Icons.list_alt, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.list_alt, color: ConstColor.darkDatalab)),
         _entryField(
           "Email UMKM",
           "Masukkan email UMKM",
           emailController,
-          entryIcon: Icon(Icons.email_outlined, color: ConstColor.sbmdarkBlue),
+          entryIcon: Icon(Icons.email_outlined, color: ConstColor.darkDatalab),
         ),
         _entryField("Nomor Telepon", "Masukkan nomor telepon UMKM",
             phoneNumberController,
@@ -536,7 +453,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(color: ConstColor.darkDatalab,),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
         ],
@@ -604,7 +521,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           message: state.message,
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xffffae88),
+          backgroundColor: ConstColor.failedNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -631,7 +548,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           message: "Informasi Mngenai UMKM Berhasil Diubah.",
           messageColor: Colors.white,
           duration: Duration(seconds: 2),
-          backgroundColor: Color(0xff039487),
+          backgroundColor: ConstColor.successNotification,
           flushbarPosition: FlushbarPosition.TOP,
           flushbarStyle: FlushbarStyle.FLOATING,
           reverseAnimationCurve: Curves.decelerate,
@@ -642,6 +559,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
     }, child: BlocBuilder<StoreBloc, StoreState>(
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: ConstColor.backgroundDatalab,
           body: Container(
             height: height,
             child: Stack(
@@ -674,7 +592,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
                         child: Container(
                             height: 100,
                             width: 100,
-                            child: CircularProgressIndicator()),
+                            child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
                       )
                     : Container()
               ],

@@ -54,7 +54,7 @@ class _ProductDetailState extends State<ProductDetail> {
       required this.tokopedia,
       required this.shopee,
       required this.bukalapak});
-    late String _userID;
+  late String _userID;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Future<void> share(String phone, String text) async {
@@ -115,19 +115,17 @@ class _ProductDetailState extends State<ProductDetail> {
                       children: [
                         Text(name,
                             overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                color: Colors.black,
+                            style: GoogleFonts.lato(
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18)),
+                                fontSize: 20)),
                         SizedBox(
                           height: 10,
                         ),
                         Text('Rp. ' + price.toString(),
                             overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14)),
+                            style: GoogleFonts.lato(
+                                color: ConstColor.textDatalab, fontSize: 14)),
                       ],
                     ),
                   ))),
@@ -153,16 +151,16 @@ class _ProductDetailState extends State<ProductDetail> {
                       children: [
                         Text('Deskripsi',
                             overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                color: Colors.black,
+                            style: GoogleFonts.lato(
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                                fontSize: 18)),
                         SizedBox(
                           height: 10,
                         ),
                         Text(description,
                             overflow: TextOverflow.fade,
-                            style: TextStyle(
+                            style: GoogleFonts.lato(
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 14),
@@ -172,10 +170,10 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                         Text('Dapatkan Produk',
                             overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                color: Colors.black,
+                            style: GoogleFonts.lato(
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16)),
+                                fontSize: 18)),
                         SizedBox(
                           height: 10,
                         ),
@@ -190,7 +188,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/tokopedia.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    StatisticRepository.updateStatistic(umkmid, 'tokopedia');
+                                    StatisticRepository.updateStatistic(
+                                        umkmid, 'tokopedia');
                                     openLink('https://www.tokopedia.com/' +
                                         tokopedia +
                                         '/');
@@ -205,7 +204,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/shopee.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    StatisticRepository.updateStatistic(umkmid, 'shopee');
+                                    StatisticRepository.updateStatistic(
+                                        umkmid, 'shopee');
                                     openLink('https://www.shopee.co.id/' +
                                         shopee +
                                         '/');
@@ -220,7 +220,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                   icon: Image.asset("assets/bukalapak.png",
                                       width: 30, height: 30),
                                   onPressed: () {
-                                    StatisticRepository.updateStatistic(umkmid, 'bukalapak');
+                                    StatisticRepository.updateStatistic(
+                                        umkmid, 'bukalapak');
                                     openLink('https://www.bukalapak.com/' +
                                         bukalapak +
                                         '/');
@@ -235,7 +236,7 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Future<void> initPreference() async {
-    _userID = await PrefRepository.getUserID()??'';
+    _userID = await PrefRepository.getUserID() ?? '';
   }
 
   @override
@@ -255,7 +256,7 @@ class _ProductDetailState extends State<ProductDetail> {
           users.doc(umkmid).collection('products').doc(productid).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -265,10 +266,11 @@ class _ProductDetailState extends State<ProductDetail> {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: ConstColor.sbmdarkBlue,
+            backgroundColor: ConstColor.darkDatalab,
             elevation: 1,
             leading: IconButton(
-                icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                icon: Icon(Icons.keyboard_arrow_left,
+                    color: ConstColor.secondaryTextDatalab),
                 onPressed: () => Navigator.pop(context)),
           ),
           body: SafeArea(
@@ -279,8 +281,8 @@ class _ProductDetailState extends State<ProductDetail> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [
-                            Color(0xfffbfbfb),
-                            Color(0xfff7f7f7),
+                            ConstColor.backgroundDatalab,
+                            ConstColor.backgroundDatalab,
                           ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter)),
@@ -322,7 +324,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       },
                       label: Text("Sunting Produk"),
                       icon: Icon(Icons.edit),
-                      backgroundColor: ConstColor.sbmdarkBlue,
+                      backgroundColor: ConstColor.darkDatalab,
                     ),
                   ],
                 )

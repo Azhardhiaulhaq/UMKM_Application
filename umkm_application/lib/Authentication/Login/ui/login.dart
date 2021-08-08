@@ -3,6 +3,7 @@
 // Github : TheAlphamerc/flutter_login_signup //
 // ------------------------------------------ //
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   late LoginBloc _loginBloc;
   bool isEmailValid = false;
   bool isPasswordValid = false;
+  bool isLoading = false;
 
   String? validateEmail(String? value) {
     if (value == null) {
@@ -82,7 +84,10 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -94,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                 border: InputBorder.none,
                 prefixIcon: entryIcon,
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                    borderSide: BorderSide(color: ConstColor.darkDatalab),
                     borderRadius: BorderRadius.circular(15)),
                 fillColor: ConstColor.textfieldBG,
                 filled: true,
@@ -119,24 +124,12 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab, ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              // QuerySnapshot<Map<String, dynamic>> statistics = await FirebaseFirestore.instance.collection('statistics').doc("DgBAPMpCbPYuvnR8vUz6cEL9JpH2").collection("dates").where("date",isLessThan: Timestamp.fromMillisecondsSinceEpoch(1627923630200)).get();
-              // var docId = statistics.docs;
-              // print(docId);
-              // DateTime date = DateTime.now();
-              // DateTime date2 = DateTime.parse('2021-08-03');
-              // DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-              // print(dateFormat.format(date));
-              // DateTime date3 = DateTime.parse(dateFormat.format(date));
-              // print(date.millisecondsSinceEpoch.toString());
-              // print(date2.millisecondsSinceEpoch.toString());
-              // print(date3.millisecondsSinceEpoch.toString());
-              
               _loginBloc.add(SignInButtonPressed(
                   email: emailController.text,
                   password: passwordController.text));
@@ -146,7 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text('Masuk',
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
+                    style: TextStyle(
+                        fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -166,7 +160,10 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Text(
               'Belum punya akun ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: ConstColor.darkDatalab),
             ),
             SizedBox(
               width: 10,
@@ -174,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
             Text(
               'Daftar',
               style: TextStyle(
-                  color: ConstColor.sbmdarkBlue,
+                  color: ConstColor.secondaryTextDatalab,
                   fontSize: 13,
                   fontWeight: FontWeight.w600),
             ),
@@ -188,10 +185,10 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: <Widget>[
         _entryField("Email", "Masukkan alamat email", emailController,
-            entryIcon: Icon(Icons.email, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.email, color: ConstColor.darkDatalab)),
         _entryField("Password", "Masukkan password", passwordController,
             isPassword: true,
-            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.lock, color: ConstColor.darkDatalab)),
       ],
     );
   }
@@ -204,36 +201,47 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     final height = MediaQuery.of(context).size.height;
     return BlocListener<LoginBloc, LoginState>(listener: (context, state) {
       if (state is LoginFailed) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(state.message),
-                  Icon(Icons.error),
-                ],
-              ),
-              backgroundColor: Color(0xffffae88),
-            ),
-          );
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          title: 'Login Gagal',
+          titleColor: Colors.white,
+          message: state.message,
+          messageColor: Colors.white,
+          duration: Duration(seconds: 2),
+          backgroundColor: ConstColor.failedNotification,
+          flushbarPosition: FlushbarPosition.TOP,
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          leftBarIndicatorColor: Colors.blue[300],
+        )..show(context);
       }
-
+      if (state is LoginLoading) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       if (state is LoginSucceed) {
-        pushNewScreen(context,
-            screen: BottomNavigation(
-              menuScreenContext: context,
-            ));
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BottomNavigation(
+                      menuScreenContext: context,
+                    )));
       }
     }, child: BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Scaffold(
             body: Container(
+          color: ConstColor.backgroundDatalab,
           height: height,
           child: Stack(
             children: <Widget>[
@@ -260,7 +268,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Positioned(top: 40, left: 0, child: _backButton()),
+              isLoading
+                  ? Center(
+                      child: Container(
+                          height: 100,
+                          width: 100,
+                          child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
+                    )
+                  : Container(),
             ],
           ),
         ));

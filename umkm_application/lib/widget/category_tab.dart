@@ -25,11 +25,11 @@ class CategoryTab extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: model.isSelected ? Colors.white : Colors.transparent,
+                color: model.isSelected ? ConstColor.textDatalab : Colors.transparent,
                 border: Border.all(
                     color: model.isSelected
-                        ? ConstColor.sbmdarkBlue
-                        : ConstColor.lightgreyBG,
+                        ? ConstColor.textDatalab
+                        : ConstColor.textDatalab,
                     width: model.isSelected ? 2 : 1),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
@@ -45,8 +45,8 @@ class CategoryTab extends StatelessWidget {
                   model.icon != null
                       ? Icon(model.icon,
                           color: model.isSelected
-                              ? ConstColor.sbmdarkBlue
-                              : Colors.black)
+                              ? ConstColor.secondaryTextDatalab
+                              : ConstColor.textDatalab)
                       : SizedBox(),
                   SizedBox(
                     width: 10,
@@ -60,8 +60,8 @@ class CategoryTab extends StatelessWidget {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: model.isSelected
-                                      ? ConstColor.sbmdarkBlue
-                                      : Colors.black)),
+                                      ? ConstColor.secondaryTextDatalab
+                                      : ConstColor.textDatalab)),
                         ),
                 ],
               ),

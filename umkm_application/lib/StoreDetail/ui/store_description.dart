@@ -95,6 +95,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               backgroundImage: image != '' ? NetworkImage(image) : NetworkImage('https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png'),
                               minRadius: 30,
                               maxRadius: 50,
+                              backgroundColor: ConstColor.darkDatalab,
                             ),
                             SizedBox(
                               height: 5,
@@ -115,7 +116,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                       child: Text('Ubah Foto'),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 3,
-                                          primary: ConstColor.sbmdarkBlue,
+                                          primary: ConstColor.darkDatalab,
                                           shape: StadiumBorder()),
                                     ))
                                 : Container(),
@@ -141,7 +142,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                       child: Text('Keluar'),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 3,
-                                          primary: Colors.redAccent,
+                                          primary: ConstColor.failedNotification,
                                           shape: StadiumBorder()),
                                     ))
                                 : Container(),
@@ -157,8 +158,8 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               children: [
                                 Text(name,
                                     overflow: TextOverflow.fade,
-                                    style: TextStyle(
-                                        color: Colors.black,
+                                    style: GoogleFonts.lato(
+                                        color: ConstColor.textDatalab,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16)),
                                 SizedBox(
@@ -169,20 +170,19 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                         ? city + ', ' + province
                                         : 'Lokasi UMKM Belum Ditambahkan',
                                     overflow: TextOverflow.fade,
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold,
+                                    style: GoogleFonts.lato(
+                                        color: ConstColor.textDatalab,
                                         fontSize: 14)),
                                 SizedBox(height: 15),
                                 Row(children: <Widget>[
                                   Icon(Icons.email,
-                                      color: ConstColor.sbmdarkBlue),
+                                      color: ConstColor.textDatalab),
                                   SizedBox(
                                     width: 8,
                                   ),
                                   Text(email,
                                       overflow: TextOverflow.fade,
-                                      style: TextStyle(
+                                      style: GoogleFonts.lato(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14))
@@ -192,7 +192,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                 ),
                                 Row(children: <Widget>[
                                   Icon(Icons.local_phone_rounded,
-                                      color: ConstColor.sbmdarkBlue),
+                                      color: ConstColor.textDatalab),
                                   SizedBox(
                                     width: 8,
                                   ),
@@ -201,7 +201,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                           ? '0' + phone
                                           : 'Nomor Belum Ditambahkan',
                                       overflow: TextOverflow.fade,
-                                      style: TextStyle(
+                                      style: GoogleFonts.lato(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14))
@@ -243,7 +243,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                           alignment: Alignment.topLeft,
                           child: Text('Video Promosi',
                               style: GoogleFonts.lato(
-                                  color: Colors.black,
+                                  color: ConstColor.textDatalab,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w900)),
                         ),
@@ -283,7 +283,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                           child: Text(
                             'Deskripsi Toko',
                             style: GoogleFonts.lato(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900),
                             textAlign: TextAlign.start,
@@ -311,7 +311,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                           child: Text(
                             'Lokasi',
                             style: GoogleFonts.lato(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900),
                             textAlign: TextAlign.start,
@@ -339,7 +339,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                           child: Text(
                             'Kontak dan Sosial Media',
                             style: GoogleFonts.lato(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900),
                             textAlign: TextAlign.start,
@@ -402,7 +402,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                           child: Text(
                             'Marketplace',
                             style: GoogleFonts.lato(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900),
                             textAlign: TextAlign.start,
@@ -488,7 +488,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
       stream: users.doc(id).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -505,8 +505,8 @@ class _StoreDescriptionState extends State<StoreDescription> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [
-                            Color(0xfffbfbfb),
-                            Color(0xfff7f7f7),
+                            ConstColor.backgroundDatalab,
+                            ConstColor.backgroundDatalab
                           ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter)),
@@ -578,7 +578,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                   },
                   label: Text("Sunting Profile"),
                   icon: Icon(Icons.edit),
-                  backgroundColor: ConstColor.sbmdarkBlue,
+                  backgroundColor: ConstColor.darkDatalab,
                 )
               : Container(),
           floatingActionButtonLocation: AlmostEndFloatFabLocation(),

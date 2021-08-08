@@ -54,31 +54,31 @@ class _BottomNavigationState extends State<BottomNavigation> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
         title: "Home",
-        activeColorPrimary: ConstColor.sbmdarkBlue,
+        activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.event),
         title: ("Event"),
-        activeColorPrimary: ConstColor.sbmdarkBlue,
+        activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.people),
         title: ("Coaching"),
-        activeColorPrimary: ConstColor.sbmdarkBlue,
+        activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.insert_chart_outlined),
         title: ("Statistic"),
-        activeColorPrimary: ConstColor.sbmdarkBlue,
+        activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(MdiIcons.faceProfile),
         title: ("Profile"),
-        activeColorPrimary: ConstColor.sbmdarkBlue,
+        activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
       ),
     ];

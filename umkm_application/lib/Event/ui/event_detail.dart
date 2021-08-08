@@ -84,10 +84,10 @@ class _EventDetailState extends State<EventDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name != '' ? name : "Event belum mempunyai nama",
+                        Text(name != '' ? name.toUpperCase() : "Event belum mempunyai nama",
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20)),
                         SizedBox(
@@ -102,8 +102,8 @@ class _EventDetailState extends State<EventDetail> {
                           Text(date,
                               overflow: TextOverflow.fade,
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  color: ConstColor.textDatalab,
+                                  fontWeight: FontWeight.normal,
                                   fontSize: 14))
                         ]),
                         SizedBox(
@@ -120,8 +120,8 @@ class _EventDetailState extends State<EventDetail> {
                                   : "Belum ada lokasi Event",
                               overflow: TextOverflow.fade,
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  color: ConstColor.textDatalab,
+                                  fontWeight: FontWeight.normal,
                                   fontSize: 14))
                         ]),
                         SizedBox(
@@ -133,7 +133,7 @@ class _EventDetailState extends State<EventDetail> {
                                 : 'Belum ada author',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14)),
                       ],
@@ -162,7 +162,7 @@ class _EventDetailState extends State<EventDetail> {
                         Text('Deskripsi',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18)),
                         SizedBox(
@@ -184,7 +184,7 @@ class _EventDetailState extends State<EventDetail> {
                         Text('Narahubung',
                             overflow: TextOverflow.fade,
                             style: TextStyle(
-                                color: Colors.black,
+                                color: ConstColor.textDatalab,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18)),
                         SizedBox(
@@ -198,7 +198,7 @@ class _EventDetailState extends State<EventDetail> {
                                       ? '+62 ' + contactPerson
                                       : 'Belum ada narahubung',
                                   style: GoogleFonts.lato(
-                                      color: Colors.black, fontSize: 14)),
+                                      color: ConstColor.textDatalab, fontSize: 14)),
                               icon: Icon(MdiIcons.whatsapp,
                                   color: Colors.green, size: 30),
                               onPressed: () {
@@ -225,7 +225,7 @@ class _EventDetailState extends State<EventDetail> {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Card(
-                color: link != '' ? Colors.blue : Colors.grey,
+                color: link != '' ? ConstColor.darkDatalab : Colors.grey,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 elevation: 3,
@@ -239,7 +239,7 @@ class _EventDetailState extends State<EventDetail> {
                                 ? 'DAFTAR'
                                 : 'BELUM ADA LINK PENDAFTARAN',
                             style: TextStyle(
-                                color: link != '' ? Colors.white : Colors.black,
+                                color: link != '' ? ConstColor.secondaryTextDatalab : Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                             textAlign: TextAlign.center,
@@ -255,7 +255,7 @@ class _EventDetailState extends State<EventDetail> {
       stream: events.doc(eventID).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -265,10 +265,10 @@ class _EventDetailState extends State<EventDetail> {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: ConstColor.sbmdarkBlue,
+            backgroundColor: ConstColor.darkDatalab,
             elevation: 1,
             leading: IconButton(
-                icon: Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                icon: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
                 onPressed: () => Navigator.pop(context)),
           ),
           body: SafeArea(
@@ -279,8 +279,7 @@ class _EventDetailState extends State<EventDetail> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [
-                            Color(0xfffbfbfb),
-                            Color(0xfff7f7f7),
+                            ConstColor.backgroundDatalab,ConstColor.backgroundDatalab
                           ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter)),
@@ -332,7 +331,7 @@ class _EventDetailState extends State<EventDetail> {
                 },
                 label: Text("Sunting Event"),
                 icon: Icon(Icons.edit),
-                backgroundColor: ConstColor.sbmdarkBlue,
+                backgroundColor: ConstColor.darkDatalab,
               ),
             ],
           ),

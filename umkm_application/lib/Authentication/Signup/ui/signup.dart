@@ -3,6 +3,7 @@
 // Github : TheAlphamerc/flutter_login_signup //
 // ------------------------------------------ //
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController umkmController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
   TextEditingController confirmController = TextEditingController(text: "");
+  bool isLoading = false;
   late RegisterBloc _registerBloc;
   Widget _backButton() {
     return InkWell(
@@ -38,10 +40,14 @@ class _SignUpPageState extends State<SignUpPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
+              child: Icon(Icons.keyboard_arrow_left,
+                  color: ConstColor.darkDatalab),
             ),
             Text('Kembali',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: ConstColor.textDatalab))
           ],
         ),
       ),
@@ -58,7 +64,10 @@ class _SignUpPageState extends State<SignUpPage> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -70,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 border: InputBorder.none,
                 prefixIcon: entryIcon,
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: ConstColor.sbmdarkBlue),
+                    borderSide: BorderSide(color: ConstColor.darkDatalab),
                     borderRadius: BorderRadius.circular(15)),
                 fillColor: ConstColor.textfieldBG,
                 filled: true,
@@ -95,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.sbmlightBlue, ConstColor.sbmdarkBlue])),
+              colors: [ConstColor.darkDatalab, ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -111,7 +120,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text('Daftar Sekarang',
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
+                    style: TextStyle(
+                        fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -122,6 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
         Navigator.pop(context);
       },
       child: Container(
+        color: ConstColor.backgroundDatalab,
         margin: EdgeInsets.symmetric(vertical: 20),
         padding: EdgeInsets.all(15),
         alignment: Alignment.bottomCenter,
@@ -130,7 +141,10 @@ class _SignUpPageState extends State<SignUpPage> {
           children: <Widget>[
             Text(
               'Sudah punya akun ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: ConstColor.textDatalab),
             ),
             SizedBox(
               width: 10,
@@ -138,7 +152,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Text(
               'Masuk',
               style: TextStyle(
-                  color: ConstColor.sbmdarkBlue,
+                  color: ConstColor.secondaryTextDatalab,
                   fontSize: 13,
                   fontWeight: FontWeight.w600),
             ),
@@ -176,19 +190,19 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       children: <Widget>[
         _entryField("Email", "Masukkan alamat email", emailController,
-            entryIcon: Icon(Icons.email, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.email, color: ConstColor.darkDatalab)),
         _entryField("Nama UMKM", "Masukkan nama UMKM", umkmController,
             entryIcon: Icon(
               Icons.account_box,
-              color: ConstColor.sbmdarkBlue,
+              color: ConstColor.darkDatalab,
             )),
         _entryField("Password", "Masukkan password", passwordController,
             isPassword: true,
-            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.lock, color: ConstColor.darkDatalab)),
         _entryField("Konfirmasi Password", "Konfirmasi password anda",
             confirmController,
             isPassword: true,
-            entryIcon: Icon(Icons.lock, color: ConstColor.sbmdarkBlue)),
+            entryIcon: Icon(Icons.lock, color: ConstColor.darkDatalab)),
       ],
     );
   }
@@ -206,27 +220,38 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
       if (state is RegisterFailed) {
-        ScaffoldMessenger.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(state.message),
-                  Icon(Icons.error),
-                ],
-              ),
-              backgroundColor: Color(0xffffae88),
-            ),
-          );
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          title: 'Registrasi Akun UMKM Gagal',
+          titleColor: Colors.white,
+          message: state.message,
+          messageColor: Colors.white,
+          duration: Duration(seconds: 2),
+          backgroundColor: ConstColor.failedNotification,
+          flushbarPosition: FlushbarPosition.TOP,
+          flushbarStyle: FlushbarStyle.FLOATING,
+          reverseAnimationCurve: Curves.decelerate,
+          forwardAnimationCurve: Curves.elasticOut,
+          leftBarIndicatorColor: Colors.blue[300],
+        )..show(context);
       }
-
+      if (state is RegisterLoading) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       if (state is RegisterSucceed) {
-        pushNewScreen(context,
-            screen: BottomNavigation(
-              menuScreenContext: context,
-            ));
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BottomNavigation(
+                      menuScreenContext: context,
+                    )));
       }
     }, child: BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
@@ -263,6 +288,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
+                isLoading
+                    ? Center(
+                        child: Container(
+                            height: 100,
+                            width: 100,
+                            child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
+                      )
+                    : Container(),
                 Positioned(top: 40, left: 0, child: _backButton()),
               ],
             ),
