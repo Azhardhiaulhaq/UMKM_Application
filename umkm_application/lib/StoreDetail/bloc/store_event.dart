@@ -8,39 +8,9 @@ abstract class StoreEvent extends Equatable {
 }
 
 class updateStore extends StoreEvent {
-  String address,
-      // ignore: non_constant_identifier_names
-      bukalapak_name,
-      city,
-      description,
-      email,
-      facebook_acc,
-      instagram_acc,
-      phone_number,
-      province,
-      shoope_name,
-      tokopedia_name,
-      umkm_name,
-      youtube_link,
-      uid;
-  List<String> tag;
-
-  updateStore(
-      {required this.uid,
-      required this.address,
-      required this.bukalapak_name,
-      required this.city,
-      required this.description,
-      required this.email,
-      required this.facebook_acc,
-      required this.instagram_acc,
-      required this.phone_number,
-      required this.province,
-      required this.shoope_name,
-      required this.tag,
-      required this.tokopedia_name,
-      required this.umkm_name,
-      required this.youtube_link});
+  Store store;
+    updateStore(
+      {required this.store});
 }
 
 class addProduct extends StoreEvent {

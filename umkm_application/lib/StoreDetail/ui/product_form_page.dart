@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:umkm_application/Model/product.dart';
 import 'package:umkm_application/StoreDetail/bloc/store_bloc.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
@@ -19,37 +20,25 @@ import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 class ProductFormPage extends StatefulWidget {
   ProductFormPage(
       {required this.umkmid,
-      required this.productid,
-      required this.name,
-      required this.description,
-      required this.image,
-      required this.price,
+      required this.product,
       Key? key})
       : super(key: key);
 
-  final String umkmid, productid, name, description, image;
-  final int price;
+  final String umkmid;
+  final Product product;
 
   @override
   _ProductFormPageState createState() => _ProductFormPageState(
       umkmid: umkmid,
-      productid: productid,
-      name: name,
-      description: description,
-      image: image,
-      price: price);
+      product : product);
 }
 
 class _ProductFormPageState extends State<ProductFormPage> {
-  final String umkmid, productid, name, description, image;
-  final int price;
+  final String umkmid;
+  final Product product;
   _ProductFormPageState(
       {required this.umkmid,
-      required this.productid,
-      required this.name,
-      required this.description,
-      required this.image,
-      required this.price});
+      required this.product});
 
   TextEditingController nameProductController = TextEditingController(text: "");
   TextEditingController descriptionController = TextEditingController(text: "");
@@ -182,7 +171,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              productid == ""
+              product.id == ""
                   ? _storeBloc.add(addProduct(
                       uid: umkmid,
                       name: nameProductController.text,
@@ -191,18 +180,18 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       image: _imageFile))
                   : _storeBloc.add(updateProduct(
                       uid: umkmid,
-                      productid: productid,
+                      productid: product.id,
                       name: nameProductController.text,
                       description: descriptionController.text,
                       price: int.parse(priceController.text),
                       image: _imageFile,
-                      imageLink: image));
+                      imageLink: product.image));
             },
             child: Container(
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text(productid != "" ? 'Update Produk' : "Tambah Produk",
+                child: Text(product.id != "" ? 'Update Produk' : "Tambah Produk",
                     style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
@@ -228,7 +217,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              _storeBloc.add(deleteProduct(uid: umkmid, productid: productid));
+              _storeBloc.add(deleteProduct(uid: umkmid, productid: product.id));
             },
             child: Container(
                 alignment: Alignment.center,
@@ -342,16 +331,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   setController() {
-    nameProductController.text = name;
-    priceController.text = price.toString();
-    descriptionController.text = description;
+    nameProductController.text = product.name;
+    priceController.text = product.price.toString();
+    descriptionController.text = product.description;
   }
 
   @override
   void initState() {
     super.initState();
     _storeBloc = BlocProvider.of<StoreBloc>(context);
-    if (productid != "") {
+    if (product.id != "") {
       setController();
     }
   }
@@ -518,7 +507,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        productid != "" ? _deleteButton(context) : Container(),
+                        product.id != "" ? _deleteButton(context) : Container(),
                         SizedBox(height: height * .15),
                       ],
                     ),

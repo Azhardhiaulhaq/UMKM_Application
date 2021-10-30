@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:umkm_application/Authentication/Login/ui/loginscreen.dart';
+import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
-import 'package:umkm_application/data/repositories/pref_repositories.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 import 'package:umkm_application/data/repositories/user_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:umkm_application/data/repositories/store_repositories.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
@@ -40,6 +39,7 @@ class StoreDescription extends StatefulWidget {
 class _StoreDescriptionState extends State<StoreDescription> {
   late DocumentReference statistics;
   final BuildContext context;
+  late YoutubePlayerController _youtubeController;
   String id;
 
   _StoreDescriptionState({
@@ -49,17 +49,19 @@ class _StoreDescriptionState extends State<StoreDescription> {
   });
   late String _userID;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference stores = FirebaseFirestore.instance.collection('stores');
 
-  Future<void> share(String phone, String text) async {
-    await WhatsappShare.share(
-      text: text,
-      phone: phone,
-    );
-  }
-
-  Future<void> isInstalled() async {
-    final val = await WhatsappShare.isInstalled();
-    print('Whatsapp is installed: $val');
+  Future<void> share(String phone, String message) async {
+    var phoneNumber = '+' + phone;
+    // ignore: non_constant_identifier_names
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + phoneNumber + "&text=" + message;
+    if (await canLaunch(whatsappURl_android)) {
+      await launch(whatsappURl_android);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+    }
   }
 
   void openLink(String url) async {
@@ -92,7 +94,10 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         Column(
                           children: [
                             CircleAvatar(
-                              backgroundImage: image != '' ? NetworkImage(image) : NetworkImage('https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png'),
+                              backgroundImage: image != ''
+                                  ? NetworkImage(image)
+                                  : NetworkImage(
+                                      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png'),
                               minRadius: 30,
                               maxRadius: 50,
                               backgroundColor: ConstColor.darkDatalab,
@@ -142,7 +147,8 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                       child: Text('Keluar'),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 3,
-                                          primary: ConstColor.failedNotification,
+                                          primary:
+                                              ConstColor.failedNotification,
                                           shape: StadiumBorder()),
                                     ))
                                 : Container(),
@@ -218,52 +224,54 @@ class _StoreDescriptionState extends State<StoreDescription> {
     String? videoID = YoutubePlayer.convertUrlToId(youtube_link) != null
         ? YoutubePlayer.convertUrlToId(youtube_link)
         : '';
-    YoutubePlayerController _youtubeController = YoutubePlayerController(
+    _youtubeController = YoutubePlayerController(
       initialVideoId: videoID!,
       flags: YoutubePlayerFlags(
         autoPlay: false,
         mute: false,
       ),
     );
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-          splashColor: Colors.transparent,
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 3,
-                  child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Column(children: <Widget>[
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: Text('Video Promosi',
-                              style: GoogleFonts.lato(
-                                  color: ConstColor.textDatalab,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        YoutubePlayer(
-                          controller: _youtubeController,
-                          showVideoProgressIndicator: true,
-                          progressIndicatorColor: ConstColor.sbmlightBlue,
-                          progressColors: ProgressBarColors(
-                              playedColor: ConstColor.sbmlightBlue,
-                              handleColor: ConstColor.sbmdarkBlue),
-                        ),
-                      ]))))),
-    );
+    return youtube_link != ''
+        ? Material(
+            color: Colors.transparent,
+            child: InkWell(
+                splashColor: Colors.transparent,
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 3,
+                        child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Column(children: <Widget>[
+                              Container(
+                                alignment: Alignment.topLeft,
+                                child: Text('Video Promosi',
+                                    style: GoogleFonts.lato(
+                                        color: ConstColor.textDatalab,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900)),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              YoutubePlayer(
+                                controller: _youtubeController,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor: ConstColor.sbmlightBlue,
+                                progressColors: ProgressBarColors(
+                                    playedColor: ConstColor.sbmlightBlue,
+                                    handleColor: ConstColor.sbmdarkBlue),
+                              ),
+                            ]))))),
+          )
+        : Container();
   }
 
   Widget _descriptionStore(String description, address, city, province, phone,
-      instagram, facebook, tokopedia, shoope, bukalapak) {
+      instagram, facebook, tokopedia, shoope, bukalapak, umkm_name) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -358,7 +366,8 @@ class _StoreDescriptionState extends State<StoreDescription> {
                                   icon: Icon(MdiIcons.whatsapp,
                                       color: Colors.green, size: 30),
                                   onPressed: () {
-                                    share('62' + phone, 'Halo');
+                                    share('62' + phone,
+                                        'Halo. Apakah ini benar dengan pemilik $umkm_name ?');
                                   },
                                 ))
                             : Container(),
@@ -469,33 +478,53 @@ class _StoreDescriptionState extends State<StoreDescription> {
     );
   }
 
-  Future<void> initPreference() async {
-    _userID = await PrefRepository.getUserID() ?? '';
-  }
-
   @override
   void initState() {
     super.initState();
-    initPreference().whenComplete(() {
-      setState(() {});
-    });
+    _userID = sharedPrefs.userid;
+  }
+
+  @override
+  void dispose() {
+    _youtubeController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     statistics = FirebaseFirestore.instance.collection('statistics').doc(id);
     return StreamBuilder<DocumentSnapshot>(
-      stream: users.doc(id).snapshots(),
+      stream: stores.doc(id).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
             child: Text('No Data'),
           );
         }
-
+        var storeMap = snapshot.data!.data() as Map<String, dynamic>;
+        Store store = Store(
+            id: id,
+            address: storeMap['address'] ?? '',
+            bukalapakName: storeMap['bukalapak_name'] ?? '',
+            city: storeMap['city'] ?? '',
+            description: storeMap['description'] ?? '',
+            email: storeMap['email'] ?? '',
+            facebookAcc: storeMap['facebook_acc'] ?? '',
+            image: storeMap['image'] ?? '',
+            instagramAcc: storeMap['instagram_acc'],
+            phoneNumber: storeMap['phone_number'],
+            province: storeMap['province'] ?? '',
+            shopeeName: storeMap['shopee_name'] ?? '',
+            name: storeMap['umkm_name'] ?? '',
+            tokopediaName: storeMap['tokopedia_name'] ?? '',
+            youtubeLink: storeMap['youtube_link'] ?? '',
+            tags: List.from(storeMap['tag'] ?? []));
         return Scaffold(
           body: SafeArea(
             child: Stack(fit: StackFit.expand, children: <Widget>[
@@ -515,29 +544,27 @@ class _StoreDescriptionState extends State<StoreDescription> {
                         children: <Widget>[
                           SizedBox(height: 10),
                           _overviewStore(
-                              snapshot.data!.get('image'),
-                              snapshot.data!.get('umkm_name'),
-                              snapshot.data!.get('city'),
-                              snapshot.data!.get('province'),
-                              snapshot.data!.get('email'),
-                              snapshot.data!.get('phone_number')),
+                              store.image,
+                              store.name,
+                              store.city,
+                              store.province,
+                              store.email ?? '',
+                              store.phoneNumber ?? ''),
                           SizedBox(height: 5),
-                          snapshot.data!.get('youtube_link') != ''
-                              ? _videoPromotion(
-                                  snapshot.data!.get('youtube_link'))
-                              : Container(),
+                          _videoPromotion(store.youtubeLink ?? ''),
                           SizedBox(height: 5),
                           _descriptionStore(
-                              snapshot.data!.get('description'),
-                              snapshot.data!.get('address'),
-                              snapshot.data!.get('city'),
-                              snapshot.data!.get('province'),
-                              snapshot.data!.get('phone_number'),
-                              snapshot.data!.get('instagram_acc'),
-                              snapshot.data!.get('facebook_acc'),
-                              snapshot.data!.get('tokopedia_name'),
-                              snapshot.data!.get('shoope_name'),
-                              snapshot.data!.get('bukalapak_name')),
+                              store.description ?? '',
+                              store.address ?? '',
+                              store.city,
+                              store.province,
+                              store.phoneNumber ?? '',
+                              store.instagramAcc ?? '',
+                              store.facebookAcc ?? '',
+                              store.tokopediaName ?? '',
+                              store.shopeeName ?? '',
+                              store.bukalapakName ?? '',
+                              store.name),
                           SizedBox(
                             height: 100,
                           ),
@@ -548,33 +575,8 @@ class _StoreDescriptionState extends State<StoreDescription> {
           floatingActionButton: _userID == id
               ? FloatingActionButton.extended(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StoreFormScreen(
-                                  address: snapshot.data!.get('address'),
-                                  bukalapakName:
-                                      snapshot.data!.get('bukalapak_name'),
-                                  city: snapshot.data!.get('city'),
-                                  description:
-                                      snapshot.data!.get('description'),
-                                  email: snapshot.data!.get('email'),
-                                  province: snapshot.data!.get('province'),
-                                  facebookAcc:
-                                      snapshot.data!.get('facebook_acc'),
-                                  instagramAcc:
-                                      snapshot.data!.get('instagram_acc'),
-                                  phoneNumber:
-                                      snapshot.data!.get('phone_number'),
-                                  shoopeName: snapshot.data!.get('shoope_name'),
-                                  tag: snapshot.data!.get('tag').cast<String>(),
-                                  tokopediaName:
-                                      snapshot.data!.get('tokopedia_name'),
-                                  uid: id,
-                                  umkmName: snapshot.data!.get('umkm_name'),
-                                  youtubeLink:
-                                      snapshot.data!.get('youtube_link'),
-                                )));
+                    Navigator.pushNamed(context, StoreFormScreen.routeName,
+                        arguments: {'store': store});
                   },
                   label: Text("Sunting Profile"),
                   icon: Icon(Icons.edit),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/data/repositories/store_repositories.dart';
 
 part 'store_event.dart';
@@ -19,21 +20,7 @@ class StoreBloc extends Bloc<StoreEvent, StoreState> {
       yield StoreLoading();
       try {
         await StoreRepository.updateStore(
-            event.address,
-            event.bukalapak_name,
-            event.city,
-            event.description,
-            event.email,
-            event.facebook_acc,
-            event.instagram_acc,
-            event.phone_number,
-            event.province,
-            event.shoope_name,
-            event.tokopedia_name,
-            event.umkm_name,
-            event.youtube_link,
-            event.uid,
-            event.tag);
+            event.store);
         yield UpdateStoreSucceed();
       } catch (e) {
         yield UpdateStoreFailed(message: e.toString());

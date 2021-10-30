@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 
 class UserRepository {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -54,8 +55,11 @@ class UserRepository {
           email: email, password: password);
 
       users.doc(auth.user!.uid).snapshots().listen((result) {
-        prefs.setString('userid', result['uid']);
-        prefs.setString('role', result['role']);
+        var mapUser = result.data() as Map<String, dynamic>;
+        sharedPrefs.setID(auth.user!.uid);
+        sharedPrefs.setEmail(auth.user!.email!);
+        sharedPrefs.setRole(mapUser['role'] ?? 'store');
+        sharedPrefs.setIsMaster(mapUser['isMaster'] ?? false);
       });
 
       return auth.user;
@@ -74,6 +78,16 @@ class UserRepository {
   static Future<bool> isSignedIn() async {
     // ignore: await_only_futures
     var currentUser = await firebaseAuth.currentUser;
+     if (currentUser != null) {
+      // ignore: await_only_futures
+      await users.doc(currentUser.uid).snapshots().listen((result) {
+        var mapUser = result.data() as Map<String, dynamic>;
+        sharedPrefs.setName(mapUser['name']??'');
+        sharedPrefs.setID(currentUser.uid);
+        sharedPrefs.setRole(mapUser['role']??'store');
+        sharedPrefs.setEmail(currentUser.email!);
+      });
+    }
     return currentUser != null;
   }
 

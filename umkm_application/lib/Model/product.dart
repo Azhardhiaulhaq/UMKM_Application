@@ -1,6 +1,6 @@
 
 class Product{
-  int id;
+  String id;
   String name;
   String description;
   String image;

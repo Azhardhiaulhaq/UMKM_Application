@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Model/ecommerce_link.dart';
+import 'package:umkm_application/Model/product.dart';
 import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
-import 'package:umkm_application/data/repositories/pref_repositories.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 import 'package:umkm_application/widget/product_card.dart';
 
 class StoreProduct extends StatefulWidget {
@@ -11,42 +13,29 @@ class StoreProduct extends StatefulWidget {
       {Key? key,
       required this.context,
       required this.umkmid,
-      required this.tokopedia,
-      required this.shopee,
-      required this.bukalapak})
+      required this.ecommerceName})
       : super(key: key);
   final BuildContext context;
   final String umkmid;
-  final String tokopedia;
-  final String shopee;
-  final String bukalapak;
+  final EcommerceName ecommerceName;
 
   @override
   _StoreProductState createState() => _StoreProductState(
-      context: context,
-      umkmid: umkmid,
-      tokopedia: tokopedia,
-      shopee: shopee,
-      bukalapak: bukalapak);
+      context: context, umkmid: umkmid, ecommerceName: ecommerceName);
 }
 
 // ignore: must_be_immutable
 class _StoreProductState extends State<StoreProduct> {
   String searchQuery = "";
-  late CollectionReference products;
+  CollectionReference stores = FirebaseFirestore.instance.collection('stores');
   final BuildContext context;
   final String umkmid;
-  final String tokopedia;
-  final String shopee;
-  final String bukalapak;
+  final EcommerceName ecommerceName;
   _StoreProductState(
       {Key? key,
       required this.context,
       required this.umkmid,
-      required this.tokopedia,
-      required this.shopee,
-      required this.bukalapak});
-    late String _userID;
+      required this.ecommerceName});
   Widget _search() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -68,10 +57,12 @@ class _StoreProductState extends State<StoreProduct> {
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Cari produk yang diinginkan",
-                    hintStyle: GoogleFonts.lato(fontSize: 12, color:ConstColor.textDatalab),
+                    hintStyle: GoogleFonts.lato(
+                        fontSize: 12, color: ConstColor.textDatalab),
                     contentPadding:
                         EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
-                    prefixIcon: Icon(Icons.search, color: ConstColor.darkDatalab)),
+                    prefixIcon:
+                        Icon(Icons.search, color: ConstColor.darkDatalab)),
               ),
             ),
           ),
@@ -82,8 +73,7 @@ class _StoreProductState extends State<StoreProduct> {
 
   Stream<QuerySnapshot> productStream() {
     return searchQuery != ""
-        ? FirebaseFirestore.instance
-            .collection('users')
+        ? stores
             .doc(umkmid)
             .collection('products')
             .where(
@@ -94,23 +84,18 @@ class _StoreProductState extends State<StoreProduct> {
                       searchQuery.codeUnitAt(searchQuery.length - 1) + 1),
             )
             .snapshots()
-        : FirebaseFirestore.instance
-            .collection('users')
-            .doc(umkmid)
-            .collection('products')
-            .snapshots();
+        : stores.doc(umkmid).collection('products').snapshots();
   }
 
   Widget _productCard() {
-    products = FirebaseFirestore.instance
-        .collection('users')
-        .doc(umkmid)
-        .collection('products');
     return StreamBuilder<QuerySnapshot>(
       stream: productStream(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -127,36 +112,34 @@ class _StoreProductState extends State<StoreProduct> {
                       mainAxisSpacing: 5,
                       crossAxisSpacing: 5,
                       childAspectRatio: 0.75),
-                  itemBuilder: (context, index) => ProductCard(
-                      umkmid: umkmid,
-                      productid: snapshot.data!.docs[index].id,
-                      name: snapshot.data!.docs[index].get('name'),
-                      description:
-                          snapshot.data!.docs[index].get('description'),
-                      image: snapshot.data!.docs[index].get('image'),
-                      price: snapshot.data!.docs[index].get('price'),
-                      tokopedia: tokopedia,
-                      shopee: shopee,
-                      bukalapak: bukalapak),
+                  itemBuilder: (context, index) {
+                    var mapProduct = snapshot.data!.docs[index].data()
+                        as Map<String, dynamic>;
+                    Product product = Product(
+                        id: snapshot.data!.docs[index].id,
+                        name: mapProduct['name'] ?? '',
+                        description: mapProduct['description'] ?? '',
+                        image: mapProduct['image'] ?? '',
+                        price: mapProduct['price'] ?? '');
+                    return ProductCard(
+                        umkmid: umkmid,
+                        product: product,
+                        ecommerceName: ecommerceName);
+                  },
                 )));
       },
     );
   }
 
-  Future<void> initPreference() async {
-    _userID = await PrefRepository.getUserID()??'';
-  }
-
   @override
   void initState() {
     super.initState();
-    initPreference().whenComplete(() {
-      setState(() {});
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Product emptyProduct =
+        Product(id: "", name: "", description: "", image: "", price: 0);
     return Scaffold(
       backgroundColor: ConstColor.backgroundDatalab,
       body: Column(
@@ -174,16 +157,14 @@ class _StoreProductState extends State<StoreProduct> {
           SizedBox(height: 100),
         ],
       ),
-      floatingActionButton: _userID == umkmid
+      floatingActionButton: sharedPrefs.userid == umkmid
           ? FloatingActionButton.extended(
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context)=> ProductFormScreen(
-                        umkmid: umkmid,
-                        productid: "",
-                        name: "",
-                        description: "",
-                        image: "",
-                        price: 0)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductFormScreen(
+                            umkmid: umkmid, product: emptyProduct)));
               },
               label: Text("Tambah Produk"),
               icon: Icon(Icons.add),

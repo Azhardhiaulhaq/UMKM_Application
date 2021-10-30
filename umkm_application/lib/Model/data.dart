@@ -25,10 +25,10 @@ class AppData{
     Event(id:3,name:"Event UMKM Bandung 3", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Senin, 01 Juli 2021"),
   ];
 
-  static List<Product> productList = [
-    Product(id:1,name:"Sepatu Casual", description: "Sepatu casual dengan bahan yang ramah lingkungan dan sangat ringan. Dibuat dengan sepenuh hati dan dengan tingkat ketelitian yang sangat tinggi. Merupakan produk lokal asli Indonesia.", image: 'https://static.vecteezy.com/system/resources/thumbnails/000/060/594/small/sport-shoes.jpg', price: 200000),
-    Product(id:2,name:"Sepatu Sepakbola", description: "Gaming mouse serbaguna", image: 'https://5.imimg.com/data5/SS/JM/EU/SELLER-16369040/vector-x-football-shoes-500x500.jpg', price: 500000),
-    Product(id:3,name:"Sepatu Lari", description: "Gaming mouse serbaguna", image: 'https://png.pngtree.com/png-vector/20201224/ourlarge/pngtree-original-running-shoes-marathon-sports-shoes-png-image_2611777.jpg', price: 300000),
-    Product(id:4,name:"Sepatu Badminton", description: "Gaming mouse serbaguna", image: 'https://rukminim1.flixcart.com/image/714/857/j687jbk0/shoe/9/z/k/ts-7000-blu-orng-6-6-vector-x-blue-orange-original-imaewqm8a25uybhe.jpeg', price: 250000),
-  ];
+  // static List<Product> productList = [
+  //   Product(id:1,name:"Sepatu Casual", description: "Sepatu casual dengan bahan yang ramah lingkungan dan sangat ringan. Dibuat dengan sepenuh hati dan dengan tingkat ketelitian yang sangat tinggi. Merupakan produk lokal asli Indonesia.", image: 'https://static.vecteezy.com/system/resources/thumbnails/000/060/594/small/sport-shoes.jpg', price: 200000),
+  //   Product(id:2,name:"Sepatu Sepakbola", description: "Gaming mouse serbaguna", image: 'https://5.imimg.com/data5/SS/JM/EU/SELLER-16369040/vector-x-football-shoes-500x500.jpg', price: 500000),
+  //   Product(id:3,name:"Sepatu Lari", description: "Gaming mouse serbaguna", image: 'https://png.pngtree.com/png-vector/20201224/ourlarge/pngtree-original-running-shoes-marathon-sports-shoes-png-image_2611777.jpg', price: 300000),
+  //   Product(id:4,name:"Sepatu Badminton", description: "Gaming mouse serbaguna", image: 'https://rukminim1.flixcart.com/image/714/857/j687jbk0/shoe/9/z/k/ts-7000-blu-orng-6-6-vector-x-blue-orange-original-imaewqm8a25uybhe.jpeg', price: 250000),
+  // ];
 }

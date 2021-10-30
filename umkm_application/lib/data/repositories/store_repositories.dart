@@ -4,11 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
+import 'package:umkm_application/Model/store.dart';
 
 class StoreRepository {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static CollectionReference users = firestore.collection('users');
+  static CollectionReference stores = firestore.collection('stores');
 
   static Future<void> updateImage(String uid, File imageFile) async {
     try {
@@ -24,46 +26,30 @@ class StoreRepository {
     }
   }
 
-  static Future<void> updateStore(
-      String address,
-      bukalapak_name,
-      city,
-      description,
-      email,
-      facebook_acc,
-      instagram_acc,
-      phone_number,
-      province,
-      shoope_name,
-      tokopedia_name,
-      umkm_name,
-      youtube_link,
-      uid,
-      List<String> tag) async {
+  static Future<void> updateStore(Store store) async {
     try {
-      await users.doc(uid).update({
-        'address': address,
-        'bukalapak_name': bukalapak_name,
-        'city': city,
-        'description': description,
-        'email': email,
-        'facebook_acc': facebook_acc,
-        'instagram_acc': instagram_acc,
-        'phone_number': phone_number,
-        'province': province,
-        'shoope_name': shoope_name,
-        'tag': tag,
-        'tokopedia_name': tokopedia_name,
-        'youtube_link': youtube_link,
-        'umkm_name': umkm_name,
+      await stores.doc(store.id).update({
+        'address': store.address,
+        'bukalapak_name': store.bukalapakName,
+        'city': store.city,
+        'description': store.description,
+        'facebook_acc': store.facebookAcc,
+        'instagram_acc': store.instagramAcc,
+        'phone_number': store.phoneNumber,
+        'province': store.province,
+        'shoope_name': store.shopeeName,
+        'tag': store.tags,
+        'tokopedia_name': store.tokopediaName,
+        'youtube_link': store.youtubeLink,
+        'umkm_name': store.name,
       });
     } catch (e) {
       print(e.toString());
     }
   }
 
-  static Future<void> addProduct(
-      String uid,String name, String description, File image, int price) async {
+  static Future<void> addProduct(String uid, String name, String description,
+      File image, int price) async {
     try {
       String fileName = basename(image.path);
       var firebaseStorageRef = FirebaseStorage.instance
@@ -74,7 +60,7 @@ class StoreRepository {
       UploadTask uploadTask = firebaseStorageRef.putFile(image);
       var taskSnapshot = await uploadTask.whenComplete(() {});
       var urlDownload = await taskSnapshot.ref.getDownloadURL();
-      await users.doc(uid).collection("products").add({
+      await stores.doc(uid).collection("products").add({
         'name': name.toUpperCase(),
         'description': description,
         'image': urlDownload,
@@ -85,16 +71,16 @@ class StoreRepository {
     }
   }
 
-  static Future<void> deleteProduct(String uid, String productid) async{
-    try{
-      await users.doc(uid).collection('products').doc(productid).delete();
-    } catch(e){
+  static Future<void> deleteProduct(String uid, String productid) async {
+    try {
+      await stores.doc(uid).collection('products').doc(productid).delete();
+    } catch (e) {
       print(e);
     }
   }
 
-  static Future<void> updateProduct(String uid, String productid, String name, String description,
-      File image, int price, String imageLink) async {
+  static Future<void> updateProduct(String uid, String productid, String name,
+      String description, File image, int price, String imageLink) async {
     try {
       var urlDownload;
       if (File(image.path).existsSync()) {
@@ -111,7 +97,7 @@ class StoreRepository {
         urlDownload = imageLink;
       }
 
-      await users.doc(uid).collection("products").doc(productid).update({
+      await stores.doc(uid).collection("products").doc(productid).update({
         'name': name.toUpperCase(),
         'description': description,
         'image': urlDownload,

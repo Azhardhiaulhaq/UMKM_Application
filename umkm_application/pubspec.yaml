@@ -34,12 +34,11 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   material_design_icons_flutter: ^5.0.5955-rc.1
   flutter_svg: ^0.22.0
-  whatsapp_share: ^1.1.1
   url_launcher: ^6.0.6
   expansion_card: ^0.1.0
   firebase_auth: ^3.0.1
   firebase_core: ^1.4.0
-  flutter_bloc: ^6.1.1
+  flutter_bloc: ^7.3.1
   cloud_firestore : ^2.4.0
   firebase_storage: ^10.0.1
   equatable: ^2.0.3
@@ -52,6 +51,7 @@ dependencies:
   get: ^4.3.4
   another_flushbar: ^1.10.24
   charts_flutter: ^0.11.0
+  flutter_phoenix: ^1.0.0
 
 
 dev_dependencies:

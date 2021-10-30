@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Model/ecommerce_link.dart';
 import 'package:umkm_application/StoreDetail/ui/store_description.dart';
 import 'package:umkm_application/StoreDetail/ui/store_product.dart';
 
@@ -9,7 +10,7 @@ class StoreDetail extends StatefulWidget {
   StoreDetail({required this.uid, Key? key}) : super(key: key);
 
   final String uid;
-
+  static const routeName = '/store/detail';
   @override
   _StoreDetailState createState() {
     return _StoreDetailState(id: uid);
@@ -18,7 +19,7 @@ class StoreDetail extends StatefulWidget {
 
 // ignore: must_be_immutable
 class _StoreDetailState extends State<StoreDetail> {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference stores = FirebaseFirestore.instance.collection('stores');
   String id;
   _StoreDetailState({
     required this.id,
@@ -32,17 +33,26 @@ class _StoreDetailState extends State<StoreDetail> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: users.doc(id).snapshots(),
+      stream: stores.doc(id).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
             child: Text('No Data'),
           );
         }
-
+        var mapStore = snapshot.data!.data() as Map<String, dynamic>;
+        print('0000000000000000000000000000000000000');
+        print(mapStore);
+        EcommerceName ecommerce = EcommerceName(
+            tokopediaLink: mapStore['tokopedia_name'],
+            shopeeLink: mapStore['shopee_name'],
+            bukalapakLink: mapStore['bukalapak_name']);
         return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -51,7 +61,8 @@ class _StoreDetailState extends State<StoreDetail> {
                 backgroundColor: ConstColor.darkDatalab,
                 elevation: 1,
                 leading: IconButton(
-                    icon: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
+                    icon: Icon(Icons.keyboard_arrow_left,
+                        color: ConstColor.secondaryTextDatalab),
                     onPressed: () => Navigator.pop(context)),
                 title: Text(snapshot.data!.get('umkm_name'),
                     style: GoogleFonts.lato(
@@ -73,9 +84,7 @@ class _StoreDetailState extends State<StoreDetail> {
                   StoreProduct(
                     context: context,
                     umkmid: id,
-                    tokopedia: snapshot.data!.get('tokopedia_name'),
-                    shopee: snapshot.data!.get('shoope_name'),
-                    bukalapak: snapshot.data!.get('bukalapak_name'),
+                    ecommerceName : ecommerce
                   )
                 ],
               )),

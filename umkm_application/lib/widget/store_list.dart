@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 
@@ -9,43 +10,10 @@ import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 class StoreList extends StatelessWidget {
   late DocumentReference statistics;
   String id;
-  String name;
-  String image;
-  String city;
-  String province;
-  String address;
-  List<String> tags;
-  String bukalapak;
-  String description;
-  String email;
-  String facebook;
-  String instagram;
-  String phone;
-  String shoope;
-  String tokopedia;
-  // ignore: non_constant_identifier_names
-  String youtube_link;
+  Store store;
 
-  StoreList({
-    Key? key,
-    required this.id,
-    required this.name,
-    required this.image,
-    required this.city,
-    required this.province,
-    required this.address,
-    required this.tags,
-    required this.bukalapak,
-    required this.description,
-    required this.email,
-    required this.facebook,
-    required this.instagram,
-    required this.phone,
-    required this.shoope,
-    required this.tokopedia,
-    // ignore: non_constant_identifier_names
-    required this.youtube_link,
-  }) : super(key: key);
+  StoreList({Key? key, required this.id, required this.store})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +27,8 @@ class StoreList extends StatelessWidget {
               splashColor: Colors.transparent,
               onTap: () {
                 StatisticRepository.updateStatistic(id, 'store');
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StoreDetail(
-                              uid: id,
-                            )));
+                Navigator.pushNamed(context, StoreDetail.routeName,
+                    arguments: {'uid': id});
               },
               child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -80,10 +44,12 @@ class StoreList extends StatelessWidget {
                           direction: Axis.vertical,
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(image != '' ? image : 'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png') ,
+                              backgroundImage: NetworkImage(store.image != ''
+                                  ? store.image
+                                  : 'https://firebasestorage.googleapis.com/v0/b/umkm-application.appspot.com/o/store_default_icon.png?alt=media&token=6f762ddb-d559-493f-878e-da794afb84c9'),
                               minRadius: 30,
                               maxRadius: 50,
-                              backgroundColor: ConstColor.darkDatalab,
+                              backgroundColor: ConstColor.lightgreyBG,
                             ),
                             SizedBox(width: 5),
                             VerticalDivider(),
@@ -93,7 +59,7 @@ class StoreList extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(name,
+                                    Text(store.name,
                                         overflow: TextOverflow.fade,
                                         style: GoogleFonts.lato(
                                             color: ConstColor.textDatalab,
@@ -102,7 +68,10 @@ class StoreList extends StatelessWidget {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text(city != '' ? city + ', ' + province : 'Belum ada lokasi',
+                                    Text(
+                                        store.city != ''
+                                            ? store.city + ', ' + store.province
+                                            : 'Belum ada lokasi',
                                         overflow: TextOverflow.fade,
                                         style: GoogleFonts.lato(
                                             color: ConstColor.textDatalab,
@@ -113,7 +82,7 @@ class StoreList extends StatelessWidget {
                                     Wrap(
                                         direction: Axis.horizontal,
                                         spacing: 5,
-                                        children: tags
+                                        children: store.tags
                                             .map(
                                               (label) => _makeLabel(label),
                                             )

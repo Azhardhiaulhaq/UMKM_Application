@@ -2,71 +2,60 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:umkm_application/Const/const_color.dart';
+import 'package:umkm_application/Model/ecommerce_link.dart';
+import 'package:umkm_application/Model/product.dart';
 import 'package:umkm_application/StoreDetail/ui/product_form_page_screen.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/data/repositories/statistic_repositories.dart';
 import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:whatsapp_share/whatsapp_share.dart';
 
 // ignore: must_be_immutable
 class ProductDetail extends StatefulWidget {
+  static const routeName = '/product/detail';
   ProductDetail(
       {Key? key,
-      required this.context,
       required this.umkmid,
       required this.productid,
-      required this.tokopedia,
-      required this.shopee,
-      required this.bukalapak})
+      required this.ecommerceName})
       : super(key: key);
   late DocumentReference statistics;
-  final BuildContext context;
   String umkmid;
   String productid;
-  String tokopedia;
-  String shopee;
-  String bukalapak;
+  EcommerceName ecommerceName;
 
   @override
   _ProductDetailState createState() => _ProductDetailState(
-      context: context,
       umkmid: umkmid,
       productid: productid,
-      tokopedia: tokopedia,
-      shopee: shopee,
-      bukalapak: bukalapak);
+      ecommerceName: ecommerceName);
 }
 
 // ignore: must_be_immutable
 class _ProductDetailState extends State<ProductDetail> {
   late DocumentReference statistics;
-  final BuildContext context;
   String umkmid;
   String productid;
-  String tokopedia;
-  String shopee;
-  String bukalapak;
+  EcommerceName ecommerceName;
   _ProductDetailState(
-      {required this.context,
+      {
       required this.umkmid,
       required this.productid,
-      required this.tokopedia,
-      required this.shopee,
-      required this.bukalapak});
+      required this.ecommerceName});
   late String _userID;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference stores = FirebaseFirestore.instance.collection('stores');
 
-  Future<void> share(String phone, String text) async {
-    await WhatsappShare.share(
-      text: text,
-      phone: phone,
-    );
-  }
-
-  Future<void> isInstalled() async {
-    final val = await WhatsappShare.isInstalled();
-    print('Whatsapp is installed: $val');
+  Future<void> share(String phone, String message) async {
+    var phoneNumber = '+' + phone;
+    // ignore: non_constant_identifier_names
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + phoneNumber + "&text=" + message;
+    if (await canLaunch(whatsappURl_android)) {
+      await launch(whatsappURl_android);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+    }
   }
 
   void openLink(String url) async {
@@ -191,7 +180,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     StatisticRepository.updateStatistic(
                                         umkmid, 'tokopedia');
                                     openLink('https://www.tokopedia.com/' +
-                                        tokopedia +
+                                        ecommerceName.tokopediaLink +
                                         '/');
                                   },
                                 )),
@@ -207,7 +196,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     StatisticRepository.updateStatistic(
                                         umkmid, 'shopee');
                                     openLink('https://www.shopee.co.id/' +
-                                        shopee +
+                                        ecommerceName.shopeeLink +
                                         '/');
                                   },
                                 )),
@@ -223,7 +212,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     StatisticRepository.updateStatistic(
                                         umkmid, 'bukalapak');
                                     openLink('https://www.bukalapak.com/' +
-                                        bukalapak +
+                                        ecommerceName.bukalapakLink +
                                         '/');
                                   },
                                 )),
@@ -253,17 +242,26 @@ class _ProductDetailState extends State<ProductDetail> {
         FirebaseFirestore.instance.collection('statistics').doc(umkmid);
     return StreamBuilder<DocumentSnapshot>(
       stream:
-          users.doc(umkmid).collection('products').doc(productid).snapshots(),
+          stores.doc(umkmid).collection('products').doc(productid).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
             child: Text('No Data'),
           );
         }
-
+        var mapProduct = snapshot.data!.data() as Map<String, dynamic>;
+        Product product = Product(
+            id: snapshot.data!.id,
+            name: mapProduct['name'] ?? '',
+            description: mapProduct['description'] ?? '',
+            image: mapProduct['image'] ?? '',
+            price: mapProduct['price'] ?? 0);
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ConstColor.darkDatalab,
@@ -290,12 +288,9 @@ class _ProductDetailState extends State<ProductDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: 20),
-                          _productImage(snapshot.data!.get('image'),
-                              snapshot.data!.get('price')),
-                          _productTitle(snapshot.data!.get('name'),
-                              snapshot.data!.get('price')),
-                          _productDescription(
-                              snapshot.data!.get('description')),
+                          _productImage(product.image, product.price),
+                          _productTitle(product.name, product.price),
+                          _productDescription(product.description),
                           SizedBox(
                             height: 100,
                           ),
@@ -314,12 +309,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             MaterialPageRoute(
                                 builder: (context) => ProductFormScreen(
                                       umkmid: umkmid,
-                                      productid: productid,
-                                      name: snapshot.data!.get('name'),
-                                      description:
-                                          snapshot.data!.get('description'),
-                                      image: snapshot.data!.get('image'),
-                                      price: snapshot.data!.get('price'),
+                                      product : product,
                                     )));
                       },
                       label: Text("Sunting Produk"),

@@ -14,101 +14,32 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/StoreDetail/bloc/store_bloc.dart';
 
 class StoreFormPage extends StatefulWidget {
   StoreFormPage(
-      {required this.address,
-      required this.bukalapakName,
-      required this.city,
-      required this.description,
-      required this.email,
-      required this.facebookAcc,
-      required this.instagramAcc,
-      required this.phoneNumber,
-      required this.province,
-      required this.shoopeName,
-      required this.tokopediaName,
-      required this.umkmName,
-      required this.youtubeLink,
-      required this.uid,
-      required this.tag,
+      {required this.store,
       Key? key})
       : super(key: key);
 
-  final String address,
-      bukalapakName,
-      city,
-      description,
-      email,
-      facebookAcc,
-      instagramAcc,
-      phoneNumber,
-      province,
-      shoopeName,
-      tokopediaName,
-      umkmName,
-      youtubeLink,
-      uid;
-  final List<String> tag;
+  final Store store;
 
   @override
   _StoreFormPageState createState() => _StoreFormPageState(
-        address: address,
-        bukalapakName: bukalapakName,
-        city: city,
-        description: description,
-        email: email,
-        facebookAcc: facebookAcc,
-        instagramAcc: instagramAcc,
-        phoneNumber: phoneNumber,
-        province: province,
-        shoopeName: shoopeName,
-        tokopediaName: tokopediaName,
-        umkmName: umkmName,
-        youtubeLink: youtubeLink,
-        uid: uid,
-        tag: tag,
+      store : store
       );
 }
 
 class _StoreFormPageState extends State<StoreFormPage> {
-  final String address,
-      bukalapakName,
-      city,
-      description,
-      email,
-      facebookAcc,
-      instagramAcc,
-      phoneNumber,
-      province,
-      shoopeName,
-      tokopediaName,
-      umkmName,
-      youtubeLink,
-      uid;
-  final List<String> tag;
+  final Store store;
+
   _StoreFormPageState(
-      {required this.address,
-      required this.bukalapakName,
-      required this.city,
-      required this.description,
-      required this.email,
-      required this.facebookAcc,
-      required this.instagramAcc,
-      required this.phoneNumber,
-      required this.province,
-      required this.shoopeName,
-      required this.tokopediaName,
-      required this.umkmName,
-      required this.youtubeLink,
-      required this.uid,
-      required this.tag});
+      {required this.store});
   TextEditingController addressController = TextEditingController(text: "");
   TextEditingController bukalapakController = TextEditingController(text: "");
   TextEditingController cityController = TextEditingController(text: "");
   TextEditingController descriptionController = TextEditingController(text: "");
-  TextEditingController emailController = TextEditingController(text: "");
   TextEditingController facebookController = TextEditingController(text: "");
   TextEditingController instagramController = TextEditingController(text: "");
   TextEditingController phoneNumberController = TextEditingController(text: "");
@@ -384,21 +315,13 @@ class _StoreFormPageState extends State<StoreFormPage> {
             splashColor: Colors.blueGrey,
             onTap: () async {
               _storeBloc.add(updateStore(
-                  address: addressController.text,
-                  bukalapak_name: bukalapakController.text,
-                  city: cityController.text,
-                  description: descriptionController.text,
-                  email: emailController.text,
-                  facebook_acc: facebookController.text,
-                  instagram_acc: instagramController.text,
-                  phone_number: phoneNumberController.text,
-                  province: provinceController.text,
-                  shoope_name: shopeeController.text,
-                  tag: selectedTag,
-                  tokopedia_name: tokopediaController.text,
-                  uid: uid,
-                  umkm_name: umkmController.text,
-                  youtube_link: youtubeController.text));
+                  store: Store(id : store.id, address: addressController.text,
+                               bukalapakName: bukalapakController.text, city: cityController.text,
+                               description: descriptionController.text, facebookAcc: facebookController.text,
+                               instagramAcc: instagramController.text, phoneNumber: phoneNumberController.text,
+                               province: provinceController.text, shopeeName: shopeeController.text,
+                               tags: selectedTag, tokopediaName: tokopediaController.text,
+                               name: umkmController.text,youtubeLink: youtubeController.text, image: '',)));
             },
             child: Container(
                 alignment: Alignment.center,
@@ -434,12 +357,6 @@ class _StoreFormPageState extends State<StoreFormPage> {
         _entryField("Deskripsi UMKM", "Masukkan deskripsi detail mengenai UMKM",
             descriptionController,
             entryIcon: Icon(Icons.list_alt, color: ConstColor.darkDatalab)),
-        _entryField(
-          "Email UMKM",
-          "Masukkan email UMKM",
-          emailController,
-          entryIcon: Icon(Icons.email_outlined, color: ConstColor.darkDatalab),
-        ),
         _entryField("Nomor Telepon", "Masukkan nomor telepon UMKM",
             phoneNumberController,
             isCP: true),
@@ -473,20 +390,19 @@ class _StoreFormPageState extends State<StoreFormPage> {
     super.initState();
     print("Login");
     _storeBloc = BlocProvider.of<StoreBloc>(context);
-    addressController.text = address;
-    bukalapakController.text = bukalapakName;
-    cityController.text = city;
-    descriptionController.text = description;
-    emailController.text = email;
-    facebookController.text = facebookAcc;
-    instagramController.text = instagramAcc;
-    phoneNumberController.text = phoneNumber;
-    provinceController.text = province;
-    shopeeController.text = shoopeName;
-    tokopediaController.text = tokopediaName;
-    umkmController.text = umkmName;
-    youtubeController.text = youtubeLink;
-    selectedTag = this.tag;
+    addressController.text = store.address??'';
+    bukalapakController.text = store.bukalapakName??'';
+    cityController.text = store.city;
+    descriptionController.text = store.description??'';
+    facebookController.text = store.facebookAcc??'';
+    instagramController.text = store.instagramAcc??'';
+    phoneNumberController.text = store.phoneNumber??'';
+    provinceController.text = store.province;
+    shopeeController.text = store.shopeeName??'';
+    tokopediaController.text = store.tokopediaName??'';
+    umkmController.text = store.name;
+    youtubeController.text = store.youtubeLink??'';
+    selectedTag = store.tags;
   }
 
   @override
@@ -495,7 +411,6 @@ class _StoreFormPageState extends State<StoreFormPage> {
     bukalapakController.dispose();
     cityController.dispose();
     descriptionController.dispose();
-    emailController.dispose();
     facebookController.dispose();
     instagramController.dispose();
     phoneNumberController.dispose();

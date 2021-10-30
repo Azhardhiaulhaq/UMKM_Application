@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Coaching/ui/coaching.dart';
+import 'package:umkm_application/ProductDetail/ui/product_detail.dart';
+import 'package:umkm_application/Statistic/ui/dummy_statistic.dart';
 import 'package:umkm_application/Statistic/ui/statistic.dart';
+import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
 import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_list.dart';
 import 'package:umkm_application/Home/ui/home.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
+import 'package:umkm_application/widget/product_card.dart';
 
 class BottomNavigation extends StatefulWidget {
   final BuildContext menuScreenContext;
@@ -21,20 +26,12 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   late PersistentTabController _controller;
   late bool _hideNavBar;
-  late String _userID;
-
-  Future<void> initPreference() async {
-    _userID = await PrefRepository.getUserID() ?? '';
-  }
 
   @override
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
     _hideNavBar = false;
-    initPreference().whenComplete(() {
-      setState(() {});
-    });
   }
 
   List<Widget> _buildScreens() {
@@ -42,9 +39,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
       HomePage(title: "Home Page"),
       EventPage(),
       CoachingPage(title: "Coaching"),
-      Statistic(uid: _userID),
+      // Statistic(uid: _userID),
+      DummyStatisticPage(title: 'Statistic'),
       StoreDetail(
-        uid: _userID,
+        uid: sharedPrefs.userid,
       )
     ];
   }
@@ -52,11 +50,34 @@ class _BottomNavigationState extends State<BottomNavigation> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: ConstColor.darkDatalab,
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: Icon(Icons.home),
+          title: "Home",
+          activeColorPrimary: ConstColor.darkDatalab,
+          inactiveColorPrimary: Colors.grey,
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: '/home',
+              onGenerateRoute: (RouteSettings settings) {
+                if (settings.name == StoreDetail.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) => new StoreDetail(
+                            uid: arg['uid'],
+                          ));
+                } else if (settings.name == StoreFormScreen.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) =>
+                          new StoreFormScreen(store: arg['store']));
+                } else if (settings.name == ProductDetail.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) => new ProductDetail(
+                          
+                          umkmid: arg['umkmid'],
+                          productid: arg['productid'],
+                          ecommerceName: arg['ecommerceName']));
+                }
+              })),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.event),
         title: ("Event"),

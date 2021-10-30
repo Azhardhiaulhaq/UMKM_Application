@@ -6,7 +6,6 @@ import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_form_page_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:whatsapp_share/whatsapp_share.dart';
 import 'package:intl/intl.dart';
 
 class EventDetail extends StatefulWidget {
@@ -28,17 +27,19 @@ class _EventDetailState extends State<EventDetail> {
   String eventID;
   _EventDetailState({required this.context, required this.eventID});
 
-  Future<void> share(String phone, String text) async {
-    await WhatsappShare.share(
-      text: text,
-      phone: phone,
-    );
+  Future<void> share(String phone, String message) async {
+    var phoneNumber = '+' + phone;
+    // ignore: non_constant_identifier_names
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + phoneNumber + "&text=" + message;
+    if (await canLaunch(whatsappURl_android)) {
+      await launch(whatsappURl_android);
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+    }
   }
 
-  Future<void> isInstalled() async {
-    final val = await WhatsappShare.isInstalled();
-    print('Whatsapp is installed: $val');
-  }
 
   void openLink(String url) async {
     if (await canLaunch(url)) {
