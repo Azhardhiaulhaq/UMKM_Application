@@ -4,28 +4,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_form_page_screen.dart';
+import 'package:umkm_application/Model/event.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 import 'package:url_launcher/url_launcher.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:intl/intl.dart';
 
 class EventDetail extends StatefulWidget {
-  EventDetail({Key? key, required this.context, required this.eventID})
-      : super(key: key);
-  final BuildContext context;
+  EventDetail({Key? key, required this.eventID}) : super(key: key);
   String eventID;
-
+  static const routeName = '/event/detail';
   @override
   _EventDetailState createState() => _EventDetailState(
-        context: context,
         eventID: eventID,
       );
 }
 
 class _EventDetailState extends State<EventDetail> {
   CollectionReference events = FirebaseFirestore.instance.collection('events');
-  final BuildContext context;
+
   String eventID;
-  _EventDetailState({required this.context, required this.eventID});
+  _EventDetailState({required this.eventID});
 
   Future<void> share(String phone, String message) async {
     var phoneNumber = '+' + phone;
@@ -39,7 +38,6 @@ class _EventDetailState extends State<EventDetail> {
           .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
     }
   }
-
 
   void openLink(String url) async {
     if (await canLaunch(url)) {
@@ -85,7 +83,10 @@ class _EventDetailState extends State<EventDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name != '' ? name.toUpperCase() : "Event belum mempunyai nama",
+                        Text(
+                            name != ''
+                                ? name.toUpperCase()
+                                : "Event belum mempunyai nama",
                             overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: ConstColor.textDatalab,
@@ -199,7 +200,8 @@ class _EventDetailState extends State<EventDetail> {
                                       ? '+62 ' + contactPerson
                                       : 'Belum ada narahubung',
                                   style: GoogleFonts.lato(
-                                      color: ConstColor.textDatalab, fontSize: 14)),
+                                      color: ConstColor.textDatalab,
+                                      fontSize: 14)),
                               icon: Icon(MdiIcons.whatsapp,
                                   color: Colors.green, size: 30),
                               onPressed: () {
@@ -240,7 +242,9 @@ class _EventDetailState extends State<EventDetail> {
                                 ? 'DAFTAR'
                                 : 'BELUM ADA LINK PENDAFTARAN',
                             style: TextStyle(
-                                color: link != '' ? ConstColor.secondaryTextDatalab : Colors.black,
+                                color: link != ''
+                                    ? ConstColor.secondaryTextDatalab
+                                    : Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                             textAlign: TextAlign.center,
@@ -256,20 +260,34 @@ class _EventDetailState extends State<EventDetail> {
       stream: events.doc(eventID).snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
             child: Text('No Data'),
           );
         }
-
+        var mapEvent = snapshot.data!.data() as Map<String, dynamic>;
+        Event event = Event(
+            id: eventID,
+            author: mapEvent['author'] ?? '',
+            image: mapEvent['banner_image'] ?? '',
+            contactPerson: mapEvent['contact_person'] ?? '',
+            date: mapEvent['date'].toDate() ?? DateTime.now(),
+            description: mapEvent['description'] ?? '',
+            link: mapEvent['link'] ?? '',
+            name: mapEvent['name'] ?? '',
+            location: mapEvent['location'] ?? '');
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ConstColor.darkDatalab,
             elevation: 1,
             leading: IconButton(
-                icon: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
+                icon: Icon(Icons.keyboard_arrow_left,
+                    color: ConstColor.secondaryTextDatalab),
                 onPressed: () => Navigator.pop(context)),
           ),
           body: SafeArea(
@@ -280,7 +298,8 @@ class _EventDetailState extends State<EventDetail> {
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [
-                            ConstColor.backgroundDatalab,ConstColor.backgroundDatalab
+                            ConstColor.backgroundDatalab,
+                            ConstColor.backgroundDatalab
                           ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter)),
@@ -288,21 +307,20 @@ class _EventDetailState extends State<EventDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: 20),
-                          snapshot.data!.get('banner_image') != ''
-                              ? _eventImage(snapshot.data!.get('banner_image'))
+                          event.image != ''
+                              ? _eventImage(event.image)
                               : Container(),
                           _eventTitle(
-                              snapshot.data!.get('name'),
-                              snapshot.data!.get('author'),
-                              DateFormat.yMMMMd()
-                                  .format(snapshot.data!.get('date').toDate()),
-                              snapshot.data!.get('location')),
-                          _eventDescription(snapshot.data!.get('description'),
-                              snapshot.data!.get('contact_person')),
+                              event.name,
+                              event.author,
+                              DateFormat.yMMMMd().format(event.date),
+                              event.location),
+                          _eventDescription(
+                              event.description, event.contactPerson),
                           SizedBox(
                             height: 10,
                           ),
-                          _linkButton(snapshot.data!.get('link')),
+                          _linkButton(event.link),
                           SizedBox(
                             height: 100,
                           ),
@@ -310,32 +328,22 @@ class _EventDetailState extends State<EventDetail> {
                       )))
             ]),
           ),
-          floatingActionButton: Column(
-            children: [
-              FloatingActionButton.extended(
-                heroTag: null,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventFormScreen(
-                                author: snapshot.data!.get('author'),
-                                contactPerson: snapshot.data!.get('contact_person'),
-                                description: snapshot.data!.get('description'),
-                                date: snapshot.data!.get('date').toDate(),
-                                eventID: eventID,
-                                link: snapshot.data!.get('link'),
-                                linkImage: snapshot.data!.get('banner_image'),
-                                location: snapshot.data!.get('location'),
-                                name: snapshot.data!.get('name'),
-                              )));
-                },
-                label: Text("Sunting Event"),
-                icon: Icon(Icons.edit),
-                backgroundColor: ConstColor.darkDatalab,
-              ),
-            ],
-          ),
+          floatingActionButton: sharedPrefs.isMaster
+              ? FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventFormScreen(
+                                  event : event
+                                )));
+                  },
+                  label: Text("Sunting Event"),
+                  icon: Icon(Icons.edit),
+                  backgroundColor: ConstColor.darkDatalab,
+                )
+              : Container(),
           floatingActionButtonLocation: AlmostEndFloatFabLocation(),
         );
       },

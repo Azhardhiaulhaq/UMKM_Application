@@ -2,31 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_detail.dart';
 import 'package:intl/intl.dart';
+import 'package:umkm_application/Model/event.dart';
 
 // ignore: must_be_immutable
 class EventCard extends StatelessWidget {
-  String eventID;
-  String name;
-  String author;
-  String bannerImage;
-  String contactPerson;
-  DateTime date;
-  String description;
-  String link;
-  String location;
+  Event event;
   bool isExpired;
-  EventCard(
-      {Key? key,
-      required this.eventID,
-      required this.name,
-      required this.author,
-      required this.bannerImage,
-      required this.contactPerson,
-      required this.date,
-      required this.description,
-      required this.link,
-      required this.location,
-      required this.isExpired})
+  EventCard({Key? key, required this.event, required this.isExpired})
       : super(key: key);
 
   @override
@@ -37,13 +19,10 @@ class EventCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           onTap: () {
-            isExpired ? print('expired') :Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EventDetail(
-                          context: context,
-                          eventID : eventID,
-                        )));
+            isExpired
+                ? print('expired')
+                : Navigator.pushNamed(context, EventDetail.routeName,
+                    arguments: {'eventID': event.id});
           },
           child: Container(
               width: MediaQuery.of(context).size.width,
@@ -71,12 +50,12 @@ class EventCard extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(DateFormat.d().format(date),
+                                    Text(DateFormat.d().format(event.date),
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 36)),
-                                    Text(DateFormat.yMMM().format(date),
+                                    Text(DateFormat.yMMM().format(event.date),
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -90,7 +69,7 @@ class EventCard extends StatelessWidget {
                           Wrap(
                             direction: Axis.vertical,
                             children: [
-                              Text(name,
+                              Text(event.name,
                                   overflow: TextOverflow.fade,
                                   style: TextStyle(
                                       color: Colors.black,
@@ -111,7 +90,7 @@ class EventCard extends StatelessWidget {
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Text(location,
+                                Text(event.location,
                                     overflow: TextOverflow.fade,
                                     style: TextStyle(
                                         color: Colors.black,

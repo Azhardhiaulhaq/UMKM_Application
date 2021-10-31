@@ -19,11 +19,11 @@ class AppData{
     Store(id:"4",name:"Seblak Jeletet Murah",image:"https://img.freepik.com/free-vector/food-logo-design_139869-254.jpg?size=626&ext=jpg", city:"Antapani",province:"Jawa Barat",tags:["Makanan"]),
   ];
 
-  static List<Event> eventList = [
-    Event(id:1,name:"Event UMKM Bandung", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Sabtu, 29 Juni 2021"),
-    Event(id:2,name:"Event UMKM Bandung 2", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Senin, 01 Juli 2021"),
-    Event(id:3,name:"Event UMKM Bandung 3", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Senin, 01 Juli 2021"),
-  ];
+  // static List<Event> eventList = [
+  //   Event(id:1,name:"Event UMKM Bandung", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Sabtu, 29 Juni 2021"),
+  //   Event(id:2,name:"Event UMKM Bandung 2", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Senin, 01 Juli 2021"),
+  //   Event(id:3,name:"Event UMKM Bandung 3", description: "Event ini adalah hasil kerjasama pemerintah Bandung dengan berbagai UMKM yang ada.",location: "Gedung Sate, Bandung, Jawa Barat", date : "Senin, 01 Juli 2021"),
+  // ];
 
   // static List<Product> productList = [
   //   Product(id:1,name:"Sepatu Casual", description: "Sepatu casual dengan bahan yang ramah lingkungan dan sangat ringan. Dibuat dengan sepenuh hati dan dengan tingkat ketelitian yang sangat tinggi. Merupakan produk lokal asli Indonesia.", image: 'https://static.vecteezy.com/system/resources/thumbnails/000/060/594/small/sport-shoes.jpg', price: 200000),

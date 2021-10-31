@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_form_page_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:umkm_application/Model/event.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 import 'package:umkm_application/widget/event_card.dart';
 
 class EventPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _EventPageState extends State<EventPage> {
                   children: <Widget>[
                     Text('Event List',
                         style: GoogleFonts.lato(
-                            color:ConstColor.textDatalab,
+                            color: ConstColor.textDatalab,
                             fontSize: 24,
                             fontWeight: FontWeight.w700))
                   ])
@@ -50,7 +51,10 @@ class _EventPageState extends State<EventPage> {
               .snapshots(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: ConstColor.darkDatalab,));
+          return Center(
+              child: CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ));
         }
         if (!snapshot.hasData) {
           return Center(
@@ -60,22 +64,25 @@ class _EventPageState extends State<EventPage> {
         return Expanded(
             child: ListView(
           scrollDirection: Axis.vertical,
-          children: snapshot.data!.docs
-              .map(
-                (e) => EventCard(
-                  eventID: e.id,
-                  author: e.get('author'),
-                  bannerImage: e.get('banner_image'),
-                  contactPerson: e.get('contact_person'),
-                  date: e.get('date').toDate(),
-                  description: e.get('description'),
-                  link: e.get('link'),
-                  location: e.get('location'),
-                  name: e.get('name'),
-                  isExpired: isExpired,
-                ),
-              )
-              .toList(),
+          children: snapshot.data!.docs.map(
+            (e) {
+              var mapEvent = e.data() as Map<String, dynamic>;
+              Event event = Event(
+                  id: e.id,
+                  author: mapEvent['author'] ?? '',
+                  image: mapEvent['banner_image'] ?? '',
+                  contactPerson: mapEvent['contact_person'] ?? '',
+                  date: mapEvent['date'].toDate() ?? DateTime.now(),
+                  description: mapEvent['description'] ?? '',
+                  link: mapEvent['link'] ?? '',
+                  name: mapEvent['name'] ?? '',
+                  location: mapEvent['location'] ?? '');
+              return EventCard(
+                event: event,
+                isExpired: isExpired,
+              );
+            },
+          ).toList(),
         ));
       },
     );
@@ -187,25 +194,21 @@ class _EventPageState extends State<EventPage> {
                   )))
         ]),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EventFormScreen(
-                author: '',
-                contactPerson: '',
-                date: DateTime.now(),
-                description: '',
-                eventID: '',
-                link: '',
-                linkImage: '',
-                location: '',
-                name: '',
-              )));
-        },
-        label: Text("Tambah Event"),
-        icon: Icon(Icons.event_outlined),
-        backgroundColor: ConstColor.darkDatalab,
-      ),
+      floatingActionButton: sharedPrefs.isMaster
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EventFormScreen(
+                              event: Event.emptyEvent(),
+                            )));
+              },
+              label: Text("Tambah Event"),
+              icon: Icon(Icons.event_outlined),
+              backgroundColor: ConstColor.darkDatalab,
+            )
+          : Container(),
       floatingActionButtonLocation: AlmostEndFloatFabLocation(),
     );
   }

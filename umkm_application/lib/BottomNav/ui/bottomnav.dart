@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:umkm_application/Coaching/ui/coaching.dart';
+import 'package:umkm_application/Event/ui/event_detail.dart';
 import 'package:umkm_application/ProductDetail/ui/product_detail.dart';
 import 'package:umkm_application/Statistic/ui/dummy_statistic.dart';
 import 'package:umkm_application/Statistic/ui/statistic.dart';
@@ -72,7 +73,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   var arg = settings.arguments as Map;
                   return MaterialPageRoute(
                       builder: (context) => new ProductDetail(
-                          
                           umkmid: arg['umkmid'],
                           productid: arg['productid'],
                           ecommerceName: arg['ecommerceName']));
@@ -83,6 +83,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
         title: ("Event"),
         activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
+        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: '/event',
+              onGenerateRoute: (RouteSettings settings) {
+                if (settings.name == EventDetail.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) => new EventDetail(
+                            eventID: arg['eventID'],
+                          ));
+                } 
+              })
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.people),

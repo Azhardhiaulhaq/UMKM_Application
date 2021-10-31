@@ -59,7 +59,7 @@ class UserRepository {
         sharedPrefs.setID(auth.user!.uid);
         sharedPrefs.setEmail(auth.user!.email!);
         sharedPrefs.setRole(mapUser['role'] ?? 'store');
-        sharedPrefs.setIsMaster(mapUser['isMaster'] ?? false);
+        sharedPrefs.setIsMaster(mapUser['is_master'] ?? false);
       });
 
       return auth.user;
@@ -86,6 +86,7 @@ class UserRepository {
         sharedPrefs.setID(currentUser.uid);
         sharedPrefs.setRole(mapUser['role']??'store');
         sharedPrefs.setEmail(currentUser.email!);
+        sharedPrefs.setIsMaster(mapUser['is_master'] ?? false);
       });
     }
     return currentUser != null;

@@ -1,8 +1,3 @@
-// ------------------------------------------ //
-// Template from : TheAlphamerc               //
-// Github : TheAlphamerc/flutter_login_signup //
-// ------------------------------------------ //
-
 import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
@@ -15,65 +10,24 @@ import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/bloc/bloc/event_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:umkm_application/Event/ui/event_list.dart';
+import 'package:umkm_application/Model/event.dart';
 
 class EventFormPage extends StatefulWidget {
   EventFormPage(
       {Key? key,
-      required this.title,
-      required this.date,
-      required this.eventID,
-      required this.name,
-      required this.location,
-      required this.description,
-      required this.author,
-      required this.link,
-      required this.contactPerson,
-      required this.linkImage})
+      required this.event})
       : super(key: key);
 
-  String title;
-  String eventID;
-  String name;
-  String location;
-  String description;
-  String author;
-  String link;
-  String contactPerson;
-  String linkImage;
-  DateTime date;
+  Event event;
   @override
   _EventFormPageState createState() => _EventFormPageState(
-      eventID: eventID,
-      name: name,
-      location: location,
-      description: description,
-      author: author,
-      link: link,
-      contactPerson: contactPerson,
-      linkImage: linkImage,
-      date: date);
+      event : event);
 }
 
 class _EventFormPageState extends State<EventFormPage> {
   _EventFormPageState(
-      {required this.date,
-      required this.eventID,
-      required this.name,
-      required this.location,
-      required this.description,
-      required this.author,
-      required this.link,
-      required this.contactPerson,
-      required this.linkImage});
-  final String eventID;
-  final String name;
-  final String location;
-  final String description;
-  final String author;
-  final String link;
-  final String contactPerson;
-  final String linkImage;
-  final DateTime date;
+      {required this.event});
+  final Event event;
   TextEditingController nameController = TextEditingController(text: "");
   TextEditingController locController = TextEditingController(text: "");
   TextEditingController descController = TextEditingController(text: "");
@@ -173,15 +127,15 @@ class _EventFormPageState extends State<EventFormPage> {
           SfDateRangePicker(
             onSelectionChanged: _onSelectionChanged,
             selectionMode: DateRangePickerSelectionMode.single,
-            initialSelectedDate: eventID != "" ? _selectedDate : DateTime.now(),
-            initialDisplayDate: eventID != "" ? _selectedDate : DateTime.now(),
+            initialSelectedDate: event.id != "" ? _selectedDate : DateTime.now(),
+            initialDisplayDate: event.id != "" ? _selectedDate : DateTime.now(),
             selectionColor: ConstColor.textDatalab,
             todayHighlightColor: ConstColor.secondaryTextDatalab,
             initialSelectedRange: PickerDateRange(
-                eventID != ""
+                event.id != ""
                     ? _selectedDate.subtract(const Duration(days: 4))
                     : DateTime.now().subtract(const Duration(days: 4)),
-                eventID != ""
+                event.id != ""
                     ? _selectedDate.add(const Duration(days: 3))
                     : DateTime.now().add(const Duration(days: 3))),
           )
@@ -270,15 +224,15 @@ class _EventFormPageState extends State<EventFormPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              eventID != ''
+              event.id != ''
                   ? _eventBloc.add(updateEventButtonPressed(
-                      eventID: eventID,
+                      eventID: event.id,
                       author: authorController.text,
                       contactPerson: cpController.text,
                       description: descController.text,
                       image: _imageFile,
                       link: linkController.text,
-                      imageLink: linkImage,
+                      imageLink: event.image,
                       location: locController.text,
                       name: nameController.text,
                       date: _selectedDate))
@@ -296,7 +250,7 @@ class _EventFormPageState extends State<EventFormPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child: Text(eventID != "" ? "Update Event" : 'Tambahkan Event',
+                child: Text(event.id != "" ? "Update Event" : 'Tambahkan Event',
                     style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
@@ -322,7 +276,7 @@ class _EventFormPageState extends State<EventFormPage> {
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
-              _eventBloc.add(deleteEventButtonPressed(eventID: eventID));
+              _eventBloc.add(deleteEventButtonPressed(eventID: event.id));
             },
             child: Container(
                 alignment: Alignment.center,
@@ -386,22 +340,21 @@ class _EventFormPageState extends State<EventFormPage> {
   }
 
   void initVariable() {
-    if (eventID != "") {
+    if (event.id != "") {
       setState(() {
-        nameController.text = name;
-        locController.text = location;
-        descController.text = description;
-        authorController.text = author;
-        cpController.text = contactPerson;
-        linkController.text = link;
-        _selectedDate = date;
+        nameController.text = event.name;
+        locController.text = event.location;
+        descController.text = event.description;
+        authorController.text = event.author;
+        cpController.text = event.contactPerson;
+        linkController.text = event.link;
+        _selectedDate = event.date;
       });
     }
   }
 
   @override
   void initState() {
-    print(eventID);
     initVariable();
     _eventBloc = BlocProvider.of<EventBloc>(context);
     super.initState();
@@ -427,7 +380,7 @@ class _EventFormPageState extends State<EventFormPage> {
           isLoading = false;
         });
         Flushbar(
-          title: eventID != ""
+          title: event.id != ""
               ? "Penyuntingan Event Gagal"
               : "Penambahan Event Gagal",
           titleColor: Colors.white,
@@ -493,11 +446,11 @@ class _EventFormPageState extends State<EventFormPage> {
         });
 
         Flushbar(
-          title: eventID != ""
+          title: event.id != ""
               ? "Penyuntingan Event Berhasil"
               : "Penambahan Event Berhasil",
           titleColor: Colors.white,
-          message: eventID != ""
+          message: event.id != ""
               ? "Informasi Event Berhasil Diubah."
               : "Informasi Event Berhasil Ditambahkan",
           messageColor: Colors.white,
