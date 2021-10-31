@@ -1,17 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.umkm_application">
+    package="com.dmsn.umkm_application">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-// don't miss this one
-<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> 
    <application
-        android:label="umkm_application"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Living Lab ITB"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
+        
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

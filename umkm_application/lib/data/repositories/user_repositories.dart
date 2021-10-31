@@ -26,10 +26,7 @@ class UserRepository {
       });
       sharedPrefs.setID(auth.user!.uid);
       sharedPrefs.setRole('store');
-      sharedPrefs.setEmail(email)
-      prefs.setString('userid', auth.user!.uid);
-      
-      prefs.setString('role', 'store');
+      sharedPrefs.setEmail(email);
       return auth.user;
     } catch (e) {
       print(e.toString());
