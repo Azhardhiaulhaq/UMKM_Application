@@ -17,28 +17,18 @@ class UserRepository {
       var auth = await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       await users.doc(auth.user!.uid).set({
-        'address': '',
-        'bukalapak_name': '',
-        'city': '',
-        'description': '',
         'uid': auth.user!.uid,
-        'email': auth.user!.email,
-        'facebook_acc': '',
-        'image': '',
-        'instagram_acc': '',
-        'phone_number': '',
-        'province': '',
-        'shoope_name': '',
-        'tag': [],
-        'tokopedia_name': '',
-        'youtube_link': '',
-        'umkm_name': umkmName.toUpperCase(),
+        'email': email,
         'role': 'store'
       });
       await statistics.doc(auth.user!.uid).set({
         'umkm_name': umkmName,
       });
+      sharedPrefs.setID(auth.user!.uid);
+      sharedPrefs.setRole('store');
+      sharedPrefs.setEmail(email)
       prefs.setString('userid', auth.user!.uid);
+      
       prefs.setString('role', 'store');
       return auth.user;
     } catch (e) {
@@ -85,7 +75,7 @@ class UserRepository {
         sharedPrefs.setName(mapUser['name']??'');
         sharedPrefs.setID(currentUser.uid);
         sharedPrefs.setRole(mapUser['role']??'store');
-        sharedPrefs.setEmail(currentUser.email!);
+        sharedPrefs.setEmail(mapUser['email']??'');
         sharedPrefs.setIsMaster(mapUser['is_master'] ?? false);
       });
     }

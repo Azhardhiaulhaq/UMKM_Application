@@ -97,7 +97,7 @@ class _StoreDescriptionState extends State<StoreDescription> {
                               backgroundImage: image != ''
                                   ? NetworkImage(image)
                                   : NetworkImage(
-                                      'https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png'),
+                                      'https://firebasestorage.googleapis.com/v0/b/umkm-application.appspot.com/o/store_default_icon.png?alt=media&token=6f762ddb-d559-493f-878e-da794afb84c9'),
                               minRadius: 30,
                               maxRadius: 50,
                               backgroundColor: ConstColor.darkDatalab,

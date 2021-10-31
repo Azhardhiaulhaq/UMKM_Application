@@ -33,4 +33,25 @@ class Store {
       this.shopeeName,
       this.tokopediaName,
       this.youtubeLink});
+
+  static Store emptyStore(String id, String email) {
+    return Store(
+      id: id,
+      address: '',
+      bukalapakName: '',
+      city: '',
+      description: '',
+      email: email,
+      facebookAcc: '',
+      image: '',
+      instagramAcc: '',
+      phoneNumber: '',
+      province: '',
+      shopeeName: '',
+      tags: [],
+      tokopediaName: '',
+      name: '',
+      youtubeLink: '',
+    );
+  }
 }

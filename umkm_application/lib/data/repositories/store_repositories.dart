@@ -28,20 +28,41 @@ class StoreRepository {
 
   static Future<void> updateStore(Store store) async {
     try {
-      await stores.doc(store.id).update({
-        'address': store.address,
-        'bukalapak_name': store.bukalapakName,
-        'city': store.city,
-        'description': store.description,
-        'facebook_acc': store.facebookAcc,
-        'instagram_acc': store.instagramAcc,
-        'phone_number': store.phoneNumber,
-        'province': store.province,
-        'shoope_name': store.shopeeName,
-        'tag': store.tags,
-        'tokopedia_name': store.tokopediaName,
-        'youtube_link': store.youtubeLink,
-        'umkm_name': store.name,
+      stores.doc(store.id).get().then((value) {
+        if (value.exists) {
+          stores.doc(store.id).update({
+            'address': store.address,
+            'bukalapak_name': store.bukalapakName,
+            'city': store.city,
+            'description': store.description,
+            'facebook_acc': store.facebookAcc,
+            'instagram_acc': store.instagramAcc,
+            'phone_number': store.phoneNumber,
+            'province': store.province,
+            'shopee_name': store.shopeeName,
+            'tag': store.tags,
+            'tokopedia_name': store.tokopediaName,
+            'youtube_link': store.youtubeLink,
+            'umkm_name': store.name,
+          });
+        } else {
+          stores.doc(store.id).set({
+            'email' : store.email,
+            'address': store.address,
+            'bukalapak_name': store.bukalapakName,
+            'city': store.city,
+            'description': store.description,
+            'facebook_acc': store.facebookAcc,
+            'instagram_acc': store.instagramAcc,
+            'phone_number': store.phoneNumber,
+            'province': store.province,
+            'shopee_name': store.shopeeName,
+            'tag': store.tags,
+            'tokopedia_name': store.tokopediaName,
+            'youtube_link': store.youtubeLink,
+            'umkm_name': store.name,
+          });
+        }
       });
     } catch (e) {
       print(e.toString());

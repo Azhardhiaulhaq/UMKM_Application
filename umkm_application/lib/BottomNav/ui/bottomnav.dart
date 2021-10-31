@@ -79,11 +79,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 }
               })),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.event),
-        title: ("Event"),
-        activeColorPrimary: ConstColor.darkDatalab,
-        inactiveColorPrimary: Colors.grey,
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+          icon: Icon(Icons.event),
+          title: ("Event"),
+          activeColorPrimary: ConstColor.darkDatalab,
+          inactiveColorPrimary: Colors.grey,
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
               initialRoute: '/event',
               onGenerateRoute: (RouteSettings settings) {
                 if (settings.name == EventDetail.routeName) {
@@ -92,9 +92,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       builder: (context) => new EventDetail(
                             eventID: arg['eventID'],
                           ));
-                } 
-              })
-      ),
+                }
+              })),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.people),
         title: ("Coaching"),
@@ -108,11 +107,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.faceProfile),
-        title: ("Profile"),
-        activeColorPrimary: ConstColor.darkDatalab,
-        inactiveColorPrimary: Colors.grey,
-      ),
+          icon: Icon(MdiIcons.faceProfile),
+          title: ("Profile"),
+          activeColorPrimary: ConstColor.darkDatalab,
+          inactiveColorPrimary: Colors.grey,
+          routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: '/profile',
+              onGenerateRoute: (RouteSettings settings) {
+                if (settings.name == StoreFormScreen.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) =>
+                          new StoreFormScreen(store: arg['store']));
+                }
+              })),
     ];
   }
 

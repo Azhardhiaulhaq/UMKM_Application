@@ -3,7 +3,6 @@
 // Github : TheAlphamerc/flutter_login_signup //
 // ------------------------------------------ //
 
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/ButtonTextStyle.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomCheckBoxGroup.dart';
@@ -16,26 +15,21 @@ import 'package:umkm_application/Const/const_color.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:umkm_application/Model/store.dart';
 import 'package:umkm_application/StoreDetail/bloc/store_bloc.dart';
+import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 
 class StoreFormPage extends StatefulWidget {
-  StoreFormPage(
-      {required this.store,
-      Key? key})
-      : super(key: key);
+  StoreFormPage({required this.store, Key? key}) : super(key: key);
 
   final Store store;
 
   @override
-  _StoreFormPageState createState() => _StoreFormPageState(
-      store : store
-      );
+  _StoreFormPageState createState() => _StoreFormPageState(store: store);
 }
 
 class _StoreFormPageState extends State<StoreFormPage> {
   final Store store;
 
-  _StoreFormPageState(
-      {required this.store});
+  _StoreFormPageState({required this.store});
   TextEditingController addressController = TextEditingController(text: "");
   TextEditingController bukalapakController = TextEditingController(text: "");
   TextEditingController cityController = TextEditingController(text: "");
@@ -64,10 +58,14 @@ class _StoreFormPageState extends State<StoreFormPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: ConstColor.secondaryTextDatalab),
+              child: Icon(Icons.keyboard_arrow_left,
+                  color: ConstColor.secondaryTextDatalab),
             ),
             Text('Kembali',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color:ConstColor.secondaryTextDatalab))
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: ConstColor.secondaryTextDatalab))
           ],
         ),
       ),
@@ -91,9 +89,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           ),
           isCP
               ? InternationalPhoneNumberInput(
-                  onInputChanged: (PhoneNumber number) {
-                    print(number.phoneNumber);
-                  },
+                  onInputChanged: (PhoneNumber number) {},
                   selectorConfig: SelectorConfig(
                     selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                   ),
@@ -126,7 +122,10 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Jenis UMKM',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color:ConstColor.textDatalab),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -178,7 +177,10 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Social Media',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: ConstColor.textDatalab),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -241,7 +243,10 @@ class _StoreFormPageState extends State<StoreFormPage> {
         children: <Widget>[
           Text(
             'Market Place',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color:ConstColor.textDatalab),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: ConstColor.textDatalab),
           ),
           SizedBox(
             height: 10,
@@ -293,7 +298,6 @@ class _StoreFormPageState extends State<StoreFormPage> {
     );
   }
 
-
   Widget _submitButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -308,27 +312,39 @@ class _StoreFormPageState extends State<StoreFormPage> {
           gradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [ConstColor.darkDatalab,ConstColor.darkDatalab])),
+              colors: [ConstColor.darkDatalab, ConstColor.darkDatalab])),
       child: Material(
           color: Colors.transparent,
           child: InkWell(
             splashColor: Colors.blueGrey,
             onTap: () async {
               _storeBloc.add(updateStore(
-                  store: Store(id : store.id, address: addressController.text,
-                               bukalapakName: bukalapakController.text, city: cityController.text,
-                               description: descriptionController.text, facebookAcc: facebookController.text,
-                               instagramAcc: instagramController.text, phoneNumber: phoneNumberController.text,
-                               province: provinceController.text, shopeeName: shopeeController.text,
-                               tags: selectedTag, tokopediaName: tokopediaController.text,
-                               name: umkmController.text,youtubeLink: youtubeController.text, image: '',)));
+                  store: Store(
+                id: store.id,
+                address: addressController.text,
+                email: sharedPrefs.email,
+                bukalapakName: bukalapakController.text,
+                city: cityController.text,
+                description: descriptionController.text,
+                facebookAcc: facebookController.text,
+                instagramAcc: instagramController.text,
+                phoneNumber: phoneNumberController.text,
+                province: provinceController.text,
+                shopeeName: shopeeController.text,
+                tags: selectedTag,
+                tokopediaName: tokopediaController.text,
+                name: umkmController.text,
+                youtubeLink: youtubeController.text,
+                image: '',
+              )));
             },
             child: Container(
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: Text('Simpan Data',
-                    style: TextStyle(fontSize: 20, color: ConstColor.secondaryTextDatalab))),
+                    style: TextStyle(
+                        fontSize: 20, color: ConstColor.secondaryTextDatalab))),
           )),
     );
   }
@@ -370,7 +386,9 @@ class _StoreFormPageState extends State<StoreFormPage> {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(color: ConstColor.darkDatalab,),
+          CircularProgressIndicator(
+            color: ConstColor.darkDatalab,
+          ),
           Container(
               margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
         ],
@@ -390,18 +408,18 @@ class _StoreFormPageState extends State<StoreFormPage> {
     super.initState();
     print("Login");
     _storeBloc = BlocProvider.of<StoreBloc>(context);
-    addressController.text = store.address??'';
-    bukalapakController.text = store.bukalapakName??'';
+    addressController.text = store.address ?? '';
+    bukalapakController.text = store.bukalapakName ?? '';
     cityController.text = store.city;
-    descriptionController.text = store.description??'';
-    facebookController.text = store.facebookAcc??'';
-    instagramController.text = store.instagramAcc??'';
-    phoneNumberController.text = store.phoneNumber??'';
+    descriptionController.text = store.description ?? '';
+    facebookController.text = store.facebookAcc ?? '';
+    instagramController.text = store.instagramAcc ?? '';
+    phoneNumberController.text = store.phoneNumber ?? '';
     provinceController.text = store.province;
-    shopeeController.text = store.shopeeName??'';
-    tokopediaController.text = store.tokopediaName??'';
+    shopeeController.text = store.shopeeName ?? '';
+    tokopediaController.text = store.tokopediaName ?? '';
     umkmController.text = store.name;
-    youtubeController.text = store.youtubeLink??'';
+    youtubeController.text = store.youtubeLink ?? '';
     selectedTag = store.tags;
   }
 
@@ -457,7 +475,7 @@ class _StoreFormPageState extends State<StoreFormPage> {
           isLoading = false;
         });
 
-                Flushbar(
+        Flushbar(
           title: "Penyuntingan UMKM Berhasil",
           titleColor: Colors.white,
           message: "Informasi Mngenai UMKM Berhasil Diubah.",
@@ -507,7 +525,9 @@ class _StoreFormPageState extends State<StoreFormPage> {
                         child: Container(
                             height: 100,
                             width: 100,
-                            child: CircularProgressIndicator(color: ConstColor.darkDatalab,)),
+                            child: CircularProgressIndicator(
+                              color: ConstColor.darkDatalab,
+                            )),
                       )
                     : Container()
               ],
