@@ -19,7 +19,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield RegisterLoading();
 
       try {
-        var user = await UserRepository.signUp(event.email, event.password, event.umkmName);
+        var user = await UserRepository.signUp(event.email, event.password, event.umkmName,'');
         if (user != null){
           yield RegisterSucceed(user:user);
         } else {

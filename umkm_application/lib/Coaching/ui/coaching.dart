@@ -92,11 +92,6 @@ class _CoachingPageState extends State<CoachingPage> {
       height: height,
       child: Stack(
         children: <Widget>[
-          Expanded(
-            child: Container(
-              color: ConstColor.backgroundDatalab,
-            ),
-          ),
           Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),

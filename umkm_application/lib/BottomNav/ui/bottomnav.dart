@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:umkm_application/Announcement/ui/announcement_detail.dart';
 import 'package:umkm_application/Coaching/ui/coaching.dart';
 import 'package:umkm_application/Event/ui/event_detail.dart';
 import 'package:umkm_application/ProductDetail/ui/product_detail.dart';
 import 'package:umkm_application/Statistic/ui/dummy_statistic.dart';
-import 'package:umkm_application/Statistic/ui/statistic.dart';
 import 'package:umkm_application/StoreDetail/ui/description_form_page_screen.dart';
 import 'package:umkm_application/StoreDetail/ui/store_detail.dart';
-import 'package:umkm_application/data/repositories/pref_repositories.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_list.dart';
+import 'package:umkm_application/Announcement/ui/announcement_list.dart';
 import 'package:umkm_application/Home/ui/home.dart';
 import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
-import 'package:umkm_application/widget/product_card.dart';
 
 class BottomNavigation extends StatefulWidget {
   final BuildContext menuScreenContext;
@@ -42,8 +41,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
       CoachingPage(title: "Coaching"),
       // Statistic(uid: _userID),
       DummyStatisticPage(title: 'Statistic'),
+      AnnouncementPage(),
       StoreDetail(
-        uid: sharedPrefs.userid,
+        //TODO: Change this
+        // uid: sharedPrefs.userid,
+        uid:  '1BxcK5j4ksfUmG3iu694syyNruf1',
       )
     ];
   }
@@ -105,6 +107,23 @@ class _BottomNavigationState extends State<BottomNavigation> {
         title: ("Statistic"),
         activeColorPrimary: ConstColor.darkDatalab,
         inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.announcement_outlined),
+        title: ("Announce"),
+        activeColorPrimary: ConstColor.darkDatalab,
+        inactiveColorPrimary: Colors.grey,
+        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: '/announcement',
+              onGenerateRoute: (RouteSettings settings) {
+                if (settings.name == AnnouncementDetail.routeName) {
+                  var arg = settings.arguments as Map;
+                  return MaterialPageRoute(
+                      builder: (context) => new AnnouncementDetail(
+                            announcementID: arg['announcementID'],
+                          ));
+                }
+              })
       ),
       PersistentBottomNavBarItem(
           icon: Icon(MdiIcons.faceProfile),

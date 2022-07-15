@@ -64,6 +64,8 @@ class _StoreDetailState extends State<StoreDetail> {
   @override
   void initState() {
     super.initState();
+    print('----- STORE ------');
+    print(id);
   }
 
   @override

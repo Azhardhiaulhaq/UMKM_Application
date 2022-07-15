@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ConstColor {
-
+  static const Color darkGreen = Color(0xff2D6B22);
   static const Color sbmlightBlue = Color(0xff06D2FF);
   static const Color sbmdarkBlue =  Color(0xff0078C9);
   static const Color textfieldBG = Color(0xfff3f3f4);
@@ -14,5 +14,8 @@ class ConstColor {
   static const Color successNotification = Color(0xff64bc26);
   static const Color failedNotification = Color(0xffea1601);
   static const Color warningNotification = Color(0xfffad202);
+  static const Color deadlineRed = Color(0xffD8212B);
+  static const Color greenText = Color(0xff5DB765);
+  static const Color lightGrey = Color(0xffE4E4E4);
 
 }

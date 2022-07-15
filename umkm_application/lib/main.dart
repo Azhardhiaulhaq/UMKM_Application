@@ -9,11 +9,17 @@ import 'package:umkm_application/Authentication/bloc/auth_bloc.dart';
 import 'package:umkm_application/BottomNav/ui/bottomnav.dart';
 import 'package:umkm_application/data/repositories/shared_pref_repositories.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await sharedPrefs.init();
+  await FlutterDownloader.initialize(
+    debug: true, // optional: set to false to disable printing logs to console (default: true)
+    ignoreSsl: true // option: set to false to disable working with http links (default: false)
+  );
   runApp(Phoenix(
       child: MaterialApp(
     title: 'Living Lab DMSN',

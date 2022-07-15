@@ -1,15 +1,45 @@
 {
   "project_info": {
     "project_number": "508765405163",
+    "firebase_url": "https://umkm-application-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "umkm-application",
     "storage_bucket": "umkm-application.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:508765405163:android:499234d743234c02a1a3ae",
+        "mobilesdk_app_id": "1:508765405163:android:f720c321db96134fa1a3ae",
         "android_client_info": {
           "package_name": "com.dmsn.umkm_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508765405163-2dp1dvleqbbqp8u6nc4lrdseulmmsqj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASCNNkiEp6ghVCLdhohawb7ltgdZq1Ubw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508765405163-2dp1dvleqbbqp8u6nc4lrdseulmmsqj2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508765405163:android:499234d743234c02a1a3ae",
+        "android_client_info": {
+          "package_name": "com.example.umkm_application"
         }
       },
       "oauth_client": [

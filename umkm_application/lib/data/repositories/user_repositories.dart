@@ -11,22 +11,28 @@ class UserRepository {
   // Sign Up with email and password
 
   static Future<User?> signUp(
-      String email, String password, String umkmName) async {
+      String email, String password, String umkmName, String? username) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print('@@@@@@@@@@@@@@@@@@@@@@@@');
+      print(email);
+      print(password);
+      print(umkmName);
+      print(username);
       var auth = await firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+          email: email.trim(), password: password.trim());
       await users.doc(auth.user!.uid).set({
         'uid': auth.user!.uid,
         'email': email,
-        'role': 'store'
+        'role': 'store',
+        'is_master' : false,
+        'username' : username??''
       });
       await statistics.doc(auth.user!.uid).set({
         'umkm_name': umkmName,
       });
-      sharedPrefs.setID(auth.user!.uid);
-      sharedPrefs.setRole('store');
-      sharedPrefs.setEmail(email);
+      // sharedPrefs.setID(auth.user!.uid);
+      // sharedPrefs.setRole('store');
+      // sharedPrefs.setEmail(email);
       return auth.user;
     } catch (e) {
       print(e.toString());

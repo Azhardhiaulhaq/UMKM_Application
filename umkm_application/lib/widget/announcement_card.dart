@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:umkm_application/Announcement/ui/announcement_detail.dart';
 import 'package:umkm_application/Const/const_color.dart';
 import 'package:umkm_application/Event/ui/event_detail.dart';
 import 'package:intl/intl.dart';
-import 'package:umkm_application/Model/event.dart';
+import 'package:umkm_application/Model/announcement.dart';
 
 // ignore: must_be_immutable
-class EventCard extends StatelessWidget {
-  Event event;
+class AnnouncementCard extends StatelessWidget {
+  Announcement announcement;
   bool isExpired;
-  EventCard({Key? key, required this.event, required this.isExpired})
+  AnnouncementCard(
+      {Key? key, required this.announcement, required this.isExpired})
       : super(key: key);
 
   @override
@@ -20,17 +22,17 @@ class EventCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.transparent,
           onTap: () {
-            isExpired
-                ? print('expired')
-                : Navigator.pushNamed(context, EventDetail.routeName,
-                    arguments: {'eventID': event.id});
+            Navigator.pushNamed(context, AnnouncementDetail.routeName,
+                arguments: {'announcementID': announcement.id});
+            // StatisticRepository.updateStatistic(id, 'store');
+            // Navigator.pushNamed(context, StoreDetail.routeName,
+            //     arguments: {'uid': id});
           },
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: 160,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Card(
-                  color: isExpired ? Color(0xffE7E7E7) : Color(0xffffffff),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   elevation: 3,
@@ -43,8 +45,7 @@ class EventCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           elevation: 3,
-                          color:
-                              isExpired ? Color(0xfffddd5c) : Color(0xff779ecb),
+                          color: ConstColor.darkDatalab,
                           child: Container(
                               width: MediaQuery.of(context).size.width * 0.2,
                               height: 90,
@@ -52,12 +53,16 @@ class EventCard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(DateFormat.d().format(event.date),
+                                  Text(
+                                      DateFormat.d()
+                                          .format(announcement.deadlines),
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          color: ConstColor.secondaryTextDatalab,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 36)),
-                                  Text(DateFormat.yMMM().format(event.date),
+                                  Text(
+                                      DateFormat.yMMM()
+                                          .format(announcement.deadlines),
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -65,48 +70,47 @@ class EventCard extends StatelessWidget {
                                 ],
                               )),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
+                        SizedBox(width: 5),
                         VerticalDivider(),
                         SizedBox(width: 5),
                         Container(
                             width: MediaQuery.of(context).size.width * 0.55,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(event.name,
+                                Text(announcement.title,
                                     overflow: TextOverflow.fade,
+                                    maxLines: 4,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16)),
-                                Divider(
-                                  color: isExpired ? Color(0xfffddd5c) :ConstColor.sbmdarkBlue,
-                                  thickness: 2,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Wrap(
-                                  alignment: WrapAlignment.start,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: <Widget>[
-                                  Icon(Icons.location_on, color: Colors.red),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(event.location,
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12))
-                                ]),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('By : ',
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 4,
+                                        style: TextStyle(
+                                            color: ConstColor.darkDatalab,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(announcement.author,
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 4,
+                                        style: TextStyle(
+                                            color: ConstColor.secondaryTextDatalab,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14)),
+                                  ],
+                                )
                               ],
                             ))
                       ],

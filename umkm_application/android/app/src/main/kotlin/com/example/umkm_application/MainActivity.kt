@@ -1,4 +1,4 @@
-package com.example.umkm_application
+package com.dmsn.umkm_application
 
 import io.flutter.embedding.android.FlutterActivity
 
