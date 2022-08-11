@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+// import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AnnouncementDetail extends StatefulWidget {
@@ -66,7 +66,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
   }
 
   void _setPath() async {
-    path = (await DownloadsPathProvider.downloadsDirectory)!.path;
+    path = ""; //(await DownloadsPathProvider.downloadsDirectory)!.path;
   }
 
   Future<void> share(String phone, String message) async {
