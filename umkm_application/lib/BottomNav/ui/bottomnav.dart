@@ -126,7 +126,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               })
       ),
       PersistentBottomNavBarItem(
-          icon: Icon(MdiIcons.faceProfile),
+          icon: Icon(MdiIcons.faceManProfile),
           title: ("Profile"),
           activeColorPrimary: ConstColor.darkDatalab,
           inactiveColorPrimary: Colors.grey,
